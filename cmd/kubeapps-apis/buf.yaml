@@ -6,6 +6,7 @@ name: "buf.build/kubeapps/kubeapps"
 build:
   roots:
     - proto
+    - .vendor
 lint:
   use:
     - DEFAULT

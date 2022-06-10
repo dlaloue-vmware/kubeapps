@@ -200,7 +200,7 @@ func (s *Server) clientOptionsForRepo(ctx context.Context, repoName types.Namesp
 	return sink.clientOptionsForRepo(ctx, *repo)
 }
 
-func (s *Server) newRepo(ctx context.Context, targetName types.NamespacedName, url string, interval uint32,
+func (s *Server) newRepo(ctx context.Context, targetName types.NamespacedName, url string, interval *metav1.Duration,
 	tlsConfig *corev1.PackageRepositoryTlsConfig, auth *corev1.PackageRepositoryAuth) (*corev1.PackageRepositoryReference, error) {
 	if url == "" {
 		return nil, status.Errorf(codes.InvalidArgument, "repository url may not be empty")
@@ -303,7 +303,7 @@ func (s *Server) repoDetail(ctx context.Context, repoRef *corev1.PackageReposito
 		NamespaceScoped: false,
 		Type:            "helm",
 		Url:             repo.Spec.URL,
-		Interval:        uint32(repo.Spec.Interval.Duration.Seconds()),
+		Interval:        &repo.Spec.Interval,
 		TlsConfig:       tlsConfig,
 		Auth:            auth,
 		CustomDetail:    nil,
@@ -543,7 +543,7 @@ func (s *Server) updateKubeappsManagedRepoSecret(
 	return secret, true, nil
 }
 
-func (s *Server) updateRepo(ctx context.Context, repoRef *corev1.PackageRepositoryReference, url string, interval uint32, tlsConfig *corev1.PackageRepositoryTlsConfig, auth *corev1.PackageRepositoryAuth) (*corev1.PackageRepositoryReference, error) {
+func (s *Server) updateRepo(ctx context.Context, repoRef *corev1.PackageRepositoryReference, url string, interval *metav1.Duration, tlsConfig *corev1.PackageRepositoryTlsConfig, auth *corev1.PackageRepositoryAuth) (*corev1.PackageRepositoryReference, error) {
 	key := types.NamespacedName{Namespace: repoRef.GetContext().GetNamespace(), Name: repoRef.GetIdentifier()}
 	repo, err := s.getRepoInCluster(ctx, key)
 	if err != nil {
@@ -565,8 +565,8 @@ func (s *Server) updateRepo(ctx context.Context, repoRef *corev1.PackageReposito
 
 	// flux does not grok description yet
 
-	if interval > 0 {
-		repo.Spec.Interval = metav1.Duration{Duration: time.Duration(interval) * time.Second}
+	if interval != nil {
+		repo.Spec.Interval = *interval
 	} else {
 		// interval is a required field
 		repo.Spec.Interval = defaultPollInterval
@@ -991,12 +991,12 @@ func checkRepoGeneration(repo sourcev1.HelmRepository) bool {
 func newFluxHelmRepo(
 	targetName types.NamespacedName,
 	url string,
-	interval uint32,
+	interval *metav1.Duration,
 	secret *apiv1.Secret,
 	passCredentials bool) (*sourcev1.HelmRepository, error) {
 	pollInterval := defaultPollInterval
-	if interval > 0 {
-		pollInterval = metav1.Duration{Duration: time.Duration(interval) * time.Second}
+	if interval != nil {
+		pollInterval = *interval
 	}
 	fluxRepo := &sourcev1.HelmRepository{
 		ObjectMeta: metav1.ObjectMeta{

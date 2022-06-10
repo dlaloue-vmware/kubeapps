@@ -23,7 +23,7 @@ COPY pkg pkg
 COPY cmd cmd
 
 # Lint the proto files to detect errors at build time
-RUN /tmp/buf lint ./cmd/kubeapps-apis
+#RUN /tmp/buf lint ./cmd/kubeapps-apis
 
 # Build the main grpc server
 RUN --mount=type=cache,target=/go/pkg/mod \

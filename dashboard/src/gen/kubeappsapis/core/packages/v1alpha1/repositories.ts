@@ -3,6 +3,7 @@ import Long from "long";
 import { grpc } from "@improbable-eng/grpc-web";
 import * as _m0 from "protobufjs/minimal";
 import { Context } from "../../../../kubeappsapis/core/packages/v1alpha1/packages";
+import { Duration } from "../../../../k8s.io/apimachinery/pkg/apis/meta/v1/generated";
 import { Plugin } from "../../../../kubeappsapis/core/plugins/v1alpha1/plugins";
 import { Any } from "../../../../google/protobuf/any";
 import { BrowserHeaders } from "browser-headers";
@@ -43,10 +44,10 @@ export interface AddPackageRepositoryRequest {
    */
   url: string;
   /**
-   * The interval at which to check the upstream for updates (in seconds)
+   * The interval at which to check the upstream for updates
    * Optional. Defaults to 10m if not specified
    */
-  interval: number;
+  interval?: Duration;
   /** TLS-specific parameters for connecting to a repository. Optional */
   tlsConfig?: PackageRepositoryTlsConfig;
   /** authentication parameters for connecting to a repository. Optional */
@@ -162,7 +163,7 @@ export enum PackageRepositoryAuth_PackageRepositoryAuthType {
 }
 
 export function packageRepositoryAuth_PackageRepositoryAuthTypeFromJSON(
-  object: any,
+  object: any
 ): PackageRepositoryAuth_PackageRepositoryAuthType {
   switch (object) {
     case 0:
@@ -197,7 +198,7 @@ export function packageRepositoryAuth_PackageRepositoryAuthTypeFromJSON(
 }
 
 export function packageRepositoryAuth_PackageRepositoryAuthTypeToJSON(
-  object: PackageRepositoryAuth_PackageRepositoryAuthType,
+  object: PackageRepositoryAuth_PackageRepositoryAuthType
 ): string {
   switch (object) {
     case PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_UNSPECIFIED:
@@ -328,10 +329,10 @@ export interface UpdatePackageRepositoryRequest {
   /** A user-provided description. */
   description: string;
   /**
-   * The interval at which to check the upstream for updates (in seconds)
+   * The interval at which to check the upstream for updates
    * Optional. Defaults to 10m if not specified
    */
-  interval: number;
+  interval?: Duration;
   /** TLS-specific parameters for connecting to a repository. Optional */
   tlsConfig?: PackageRepositoryTlsConfig;
   /** authentication parameters for connecting to a repository. Optional */
@@ -442,7 +443,7 @@ export enum PackageRepositoryStatus_StatusReason {
 }
 
 export function packageRepositoryStatus_StatusReasonFromJSON(
-  object: any,
+  object: any
 ): PackageRepositoryStatus_StatusReason {
   switch (object) {
     case 0:
@@ -465,7 +466,7 @@ export function packageRepositoryStatus_StatusReasonFromJSON(
 }
 
 export function packageRepositoryStatus_StatusReasonToJSON(
-  object: PackageRepositoryStatus_StatusReason,
+  object: PackageRepositoryStatus_StatusReason
 ): string {
   switch (object) {
     case PackageRepositoryStatus_StatusReason.STATUS_REASON_UNSPECIFIED:
@@ -496,8 +497,8 @@ export interface PackageRepositoryDetail {
   type: string;
   /** A URL identifying the package repository location. */
   url: string;
-  /** The interval at which to check the upstream for updates (in seconds) */
-  interval: number;
+  /** The interval at which to check the upstream for updates */
+  interval?: Duration;
   /**
    * TLS-specific parameters for connecting to a repository.
    * If the cert authority was configured for this repository, then in the context
@@ -588,7 +589,7 @@ function createBaseAddPackageRepositoryRequest(): AddPackageRepositoryRequest {
     namespaceScoped: false,
     type: "",
     url: "",
-    interval: 0,
+    interval: undefined,
     tlsConfig: undefined,
     auth: undefined,
     plugin: undefined,
@@ -599,7 +600,7 @@ function createBaseAddPackageRepositoryRequest(): AddPackageRepositoryRequest {
 export const AddPackageRepositoryRequest = {
   encode(
     message: AddPackageRepositoryRequest,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.context !== undefined) {
       Context.encode(message.context, writer.uint32(10).fork()).ldelim();
@@ -619,14 +620,20 @@ export const AddPackageRepositoryRequest = {
     if (message.url !== "") {
       writer.uint32(50).string(message.url);
     }
-    if (message.interval !== 0) {
-      writer.uint32(56).uint32(message.interval);
+    if (message.interval !== undefined) {
+      Duration.encode(message.interval, writer.uint32(58).fork()).ldelim();
     }
     if (message.tlsConfig !== undefined) {
-      PackageRepositoryTlsConfig.encode(message.tlsConfig, writer.uint32(66).fork()).ldelim();
+      PackageRepositoryTlsConfig.encode(
+        message.tlsConfig,
+        writer.uint32(66).fork()
+      ).ldelim();
     }
     if (message.auth !== undefined) {
-      PackageRepositoryAuth.encode(message.auth, writer.uint32(74).fork()).ldelim();
+      PackageRepositoryAuth.encode(
+        message.auth,
+        writer.uint32(74).fork()
+      ).ldelim();
     }
     if (message.plugin !== undefined) {
       Plugin.encode(message.plugin, writer.uint32(82).fork()).ldelim();
@@ -637,7 +644,10 @@ export const AddPackageRepositoryRequest = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): AddPackageRepositoryRequest {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): AddPackageRepositoryRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAddPackageRepositoryRequest();
@@ -663,10 +673,13 @@ export const AddPackageRepositoryRequest = {
           message.url = reader.string();
           break;
         case 7:
-          message.interval = reader.uint32();
+          message.interval = Duration.decode(reader, reader.uint32());
           break;
         case 8:
-          message.tlsConfig = PackageRepositoryTlsConfig.decode(reader, reader.uint32());
+          message.tlsConfig = PackageRepositoryTlsConfig.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 9:
           message.auth = PackageRepositoryAuth.decode(reader, reader.uint32());
@@ -687,47 +700,68 @@ export const AddPackageRepositoryRequest = {
 
   fromJSON(object: any): AddPackageRepositoryRequest {
     return {
-      context: isSet(object.context) ? Context.fromJSON(object.context) : undefined,
+      context: isSet(object.context)
+        ? Context.fromJSON(object.context)
+        : undefined,
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      namespaceScoped: isSet(object.namespaceScoped) ? Boolean(object.namespaceScoped) : false,
+      namespaceScoped: isSet(object.namespaceScoped)
+        ? Boolean(object.namespaceScoped)
+        : false,
       type: isSet(object.type) ? String(object.type) : "",
       url: isSet(object.url) ? String(object.url) : "",
-      interval: isSet(object.interval) ? Number(object.interval) : 0,
+      interval: isSet(object.interval)
+        ? Duration.fromJSON(object.interval)
+        : undefined,
       tlsConfig: isSet(object.tlsConfig)
         ? PackageRepositoryTlsConfig.fromJSON(object.tlsConfig)
         : undefined,
-      auth: isSet(object.auth) ? PackageRepositoryAuth.fromJSON(object.auth) : undefined,
+      auth: isSet(object.auth)
+        ? PackageRepositoryAuth.fromJSON(object.auth)
+        : undefined,
       plugin: isSet(object.plugin) ? Plugin.fromJSON(object.plugin) : undefined,
-      customDetail: isSet(object.customDetail) ? Any.fromJSON(object.customDetail) : undefined,
+      customDetail: isSet(object.customDetail)
+        ? Any.fromJSON(object.customDetail)
+        : undefined,
     };
   },
 
   toJSON(message: AddPackageRepositoryRequest): unknown {
     const obj: any = {};
     message.context !== undefined &&
-      (obj.context = message.context ? Context.toJSON(message.context) : undefined);
+      (obj.context = message.context
+        ? Context.toJSON(message.context)
+        : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.namespaceScoped !== undefined && (obj.namespaceScoped = message.namespaceScoped);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.namespaceScoped !== undefined &&
+      (obj.namespaceScoped = message.namespaceScoped);
     message.type !== undefined && (obj.type = message.type);
     message.url !== undefined && (obj.url = message.url);
-    message.interval !== undefined && (obj.interval = Math.round(message.interval));
+    message.interval !== undefined &&
+      (obj.interval = message.interval
+        ? Duration.toJSON(message.interval)
+        : undefined);
     message.tlsConfig !== undefined &&
       (obj.tlsConfig = message.tlsConfig
         ? PackageRepositoryTlsConfig.toJSON(message.tlsConfig)
         : undefined);
     message.auth !== undefined &&
-      (obj.auth = message.auth ? PackageRepositoryAuth.toJSON(message.auth) : undefined);
+      (obj.auth = message.auth
+        ? PackageRepositoryAuth.toJSON(message.auth)
+        : undefined);
     message.plugin !== undefined &&
       (obj.plugin = message.plugin ? Plugin.toJSON(message.plugin) : undefined);
     message.customDetail !== undefined &&
-      (obj.customDetail = message.customDetail ? Any.toJSON(message.customDetail) : undefined);
+      (obj.customDetail = message.customDetail
+        ? Any.toJSON(message.customDetail)
+        : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<AddPackageRepositoryRequest>, I>>(
-    object: I,
+    object: I
   ): AddPackageRepositoryRequest {
     const message = createBaseAddPackageRepositoryRequest();
     message.context =
@@ -739,7 +773,10 @@ export const AddPackageRepositoryRequest = {
     message.namespaceScoped = object.namespaceScoped ?? false;
     message.type = object.type ?? "";
     message.url = object.url ?? "";
-    message.interval = object.interval ?? 0;
+    message.interval =
+      object.interval !== undefined && object.interval !== null
+        ? Duration.fromPartial(object.interval)
+        : undefined;
     message.tlsConfig =
       object.tlsConfig !== undefined && object.tlsConfig !== null
         ? PackageRepositoryTlsConfig.fromPartial(object.tlsConfig)
@@ -771,7 +808,7 @@ function createBasePackageRepositoryTlsConfig(): PackageRepositoryTlsConfig {
 export const PackageRepositoryTlsConfig = {
   encode(
     message: PackageRepositoryTlsConfig,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.insecureSkipVerify === true) {
       writer.uint32(8).bool(message.insecureSkipVerify);
@@ -780,12 +817,18 @@ export const PackageRepositoryTlsConfig = {
       writer.uint32(18).string(message.certAuthority);
     }
     if (message.secretRef !== undefined) {
-      SecretKeyReference.encode(message.secretRef, writer.uint32(26).fork()).ldelim();
+      SecretKeyReference.encode(
+        message.secretRef,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryTlsConfig {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryTlsConfig {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryTlsConfig();
@@ -799,7 +842,10 @@ export const PackageRepositoryTlsConfig = {
           message.certAuthority = reader.string();
           break;
         case 3:
-          message.secretRef = SecretKeyReference.decode(reader, reader.uint32());
+          message.secretRef = SecretKeyReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -814,7 +860,9 @@ export const PackageRepositoryTlsConfig = {
       insecureSkipVerify: isSet(object.insecureSkipVerify)
         ? Boolean(object.insecureSkipVerify)
         : false,
-      certAuthority: isSet(object.certAuthority) ? String(object.certAuthority) : undefined,
+      certAuthority: isSet(object.certAuthority)
+        ? String(object.certAuthority)
+        : undefined,
       secretRef: isSet(object.secretRef)
         ? SecretKeyReference.fromJSON(object.secretRef)
         : undefined,
@@ -825,7 +873,8 @@ export const PackageRepositoryTlsConfig = {
     const obj: any = {};
     message.insecureSkipVerify !== undefined &&
       (obj.insecureSkipVerify = message.insecureSkipVerify);
-    message.certAuthority !== undefined && (obj.certAuthority = message.certAuthority);
+    message.certAuthority !== undefined &&
+      (obj.certAuthority = message.certAuthority);
     message.secretRef !== undefined &&
       (obj.secretRef = message.secretRef
         ? SecretKeyReference.toJSON(message.secretRef)
@@ -834,7 +883,7 @@ export const PackageRepositoryTlsConfig = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryTlsConfig>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryTlsConfig {
     const message = createBasePackageRepositoryTlsConfig();
     message.insecureSkipVerify = object.insecureSkipVerify ?? false;
@@ -862,30 +911,48 @@ function createBasePackageRepositoryAuth(): PackageRepositoryAuth {
 }
 
 export const PackageRepositoryAuth = {
-  encode(message: PackageRepositoryAuth, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryAuth,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
     }
     if (message.usernamePassword !== undefined) {
-      UsernamePassword.encode(message.usernamePassword, writer.uint32(18).fork()).ldelim();
+      UsernamePassword.encode(
+        message.usernamePassword,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     if (message.tlsCertKey !== undefined) {
       TlsCertKey.encode(message.tlsCertKey, writer.uint32(26).fork()).ldelim();
     }
     if (message.dockerCreds !== undefined) {
-      DockerCredentials.encode(message.dockerCreds, writer.uint32(34).fork()).ldelim();
+      DockerCredentials.encode(
+        message.dockerCreds,
+        writer.uint32(34).fork()
+      ).ldelim();
     }
     if (message.header !== undefined) {
       writer.uint32(42).string(message.header);
     }
     if (message.secretRef !== undefined) {
-      SecretKeyReference.encode(message.secretRef, writer.uint32(50).fork()).ldelim();
+      SecretKeyReference.encode(
+        message.secretRef,
+        writer.uint32(50).fork()
+      ).ldelim();
     }
     if (message.sshCreds !== undefined) {
-      SshCredentials.encode(message.sshCreds, writer.uint32(66).fork()).ldelim();
+      SshCredentials.encode(
+        message.sshCreds,
+        writer.uint32(66).fork()
+      ).ldelim();
     }
     if (message.opaqueCreds !== undefined) {
-      OpaqueCredentials.encode(message.opaqueCreds, writer.uint32(74).fork()).ldelim();
+      OpaqueCredentials.encode(
+        message.opaqueCreds,
+        writer.uint32(74).fork()
+      ).ldelim();
     }
     if (message.passCredentials === true) {
       writer.uint32(56).bool(message.passCredentials);
@@ -893,7 +960,10 @@ export const PackageRepositoryAuth = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryAuth {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryAuth {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryAuth();
@@ -904,25 +974,37 @@ export const PackageRepositoryAuth = {
           message.type = reader.int32() as any;
           break;
         case 2:
-          message.usernamePassword = UsernamePassword.decode(reader, reader.uint32());
+          message.usernamePassword = UsernamePassword.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 3:
           message.tlsCertKey = TlsCertKey.decode(reader, reader.uint32());
           break;
         case 4:
-          message.dockerCreds = DockerCredentials.decode(reader, reader.uint32());
+          message.dockerCreds = DockerCredentials.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 5:
           message.header = reader.string();
           break;
         case 6:
-          message.secretRef = SecretKeyReference.decode(reader, reader.uint32());
+          message.secretRef = SecretKeyReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 8:
           message.sshCreds = SshCredentials.decode(reader, reader.uint32());
           break;
         case 9:
-          message.opaqueCreds = OpaqueCredentials.decode(reader, reader.uint32());
+          message.opaqueCreds = OpaqueCredentials.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 7:
           message.passCredentials = reader.bool();
@@ -943,7 +1025,9 @@ export const PackageRepositoryAuth = {
       usernamePassword: isSet(object.usernamePassword)
         ? UsernamePassword.fromJSON(object.usernamePassword)
         : undefined,
-      tlsCertKey: isSet(object.tlsCertKey) ? TlsCertKey.fromJSON(object.tlsCertKey) : undefined,
+      tlsCertKey: isSet(object.tlsCertKey)
+        ? TlsCertKey.fromJSON(object.tlsCertKey)
+        : undefined,
       dockerCreds: isSet(object.dockerCreds)
         ? DockerCredentials.fromJSON(object.dockerCreds)
         : undefined,
@@ -951,24 +1035,32 @@ export const PackageRepositoryAuth = {
       secretRef: isSet(object.secretRef)
         ? SecretKeyReference.fromJSON(object.secretRef)
         : undefined,
-      sshCreds: isSet(object.sshCreds) ? SshCredentials.fromJSON(object.sshCreds) : undefined,
+      sshCreds: isSet(object.sshCreds)
+        ? SshCredentials.fromJSON(object.sshCreds)
+        : undefined,
       opaqueCreds: isSet(object.opaqueCreds)
         ? OpaqueCredentials.fromJSON(object.opaqueCreds)
         : undefined,
-      passCredentials: isSet(object.passCredentials) ? Boolean(object.passCredentials) : false,
+      passCredentials: isSet(object.passCredentials)
+        ? Boolean(object.passCredentials)
+        : false,
     };
   },
 
   toJSON(message: PackageRepositoryAuth): unknown {
     const obj: any = {};
     message.type !== undefined &&
-      (obj.type = packageRepositoryAuth_PackageRepositoryAuthTypeToJSON(message.type));
+      (obj.type = packageRepositoryAuth_PackageRepositoryAuthTypeToJSON(
+        message.type
+      ));
     message.usernamePassword !== undefined &&
       (obj.usernamePassword = message.usernamePassword
         ? UsernamePassword.toJSON(message.usernamePassword)
         : undefined);
     message.tlsCertKey !== undefined &&
-      (obj.tlsCertKey = message.tlsCertKey ? TlsCertKey.toJSON(message.tlsCertKey) : undefined);
+      (obj.tlsCertKey = message.tlsCertKey
+        ? TlsCertKey.toJSON(message.tlsCertKey)
+        : undefined);
     message.dockerCreds !== undefined &&
       (obj.dockerCreds = message.dockerCreds
         ? DockerCredentials.toJSON(message.dockerCreds)
@@ -979,17 +1071,20 @@ export const PackageRepositoryAuth = {
         ? SecretKeyReference.toJSON(message.secretRef)
         : undefined);
     message.sshCreds !== undefined &&
-      (obj.sshCreds = message.sshCreds ? SshCredentials.toJSON(message.sshCreds) : undefined);
+      (obj.sshCreds = message.sshCreds
+        ? SshCredentials.toJSON(message.sshCreds)
+        : undefined);
     message.opaqueCreds !== undefined &&
       (obj.opaqueCreds = message.opaqueCreds
         ? OpaqueCredentials.toJSON(message.opaqueCreds)
         : undefined);
-    message.passCredentials !== undefined && (obj.passCredentials = message.passCredentials);
+    message.passCredentials !== undefined &&
+      (obj.passCredentials = message.passCredentials);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryAuth>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryAuth {
     const message = createBasePackageRepositoryAuth();
     message.type = object.type ?? 0;
@@ -1028,7 +1123,10 @@ function createBaseUsernamePassword(): UsernamePassword {
 }
 
 export const UsernamePassword = {
-  encode(message: UsernamePassword, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: UsernamePassword,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.username !== "") {
       writer.uint32(10).string(message.username);
     }
@@ -1073,7 +1171,9 @@ export const UsernamePassword = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UsernamePassword>, I>>(object: I): UsernamePassword {
+  fromPartial<I extends Exact<DeepPartial<UsernamePassword>, I>>(
+    object: I
+  ): UsernamePassword {
     const message = createBaseUsernamePassword();
     message.username = object.username ?? "";
     message.password = object.password ?? "";
@@ -1086,7 +1186,10 @@ function createBaseTlsCertKey(): TlsCertKey {
 }
 
 export const TlsCertKey = {
-  encode(message: TlsCertKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TlsCertKey,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.cert !== "") {
       writer.uint32(10).string(message.cert);
     }
@@ -1131,7 +1234,9 @@ export const TlsCertKey = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<TlsCertKey>, I>>(object: I): TlsCertKey {
+  fromPartial<I extends Exact<DeepPartial<TlsCertKey>, I>>(
+    object: I
+  ): TlsCertKey {
     const message = createBaseTlsCertKey();
     message.cert = object.cert ?? "";
     message.key = object.key ?? "";
@@ -1144,7 +1249,10 @@ function createBaseDockerCredentials(): DockerCredentials {
 }
 
 export const DockerCredentials = {
-  encode(message: DockerCredentials, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DockerCredentials,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.server !== "") {
       writer.uint32(10).string(message.server);
     }
@@ -1205,7 +1313,9 @@ export const DockerCredentials = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DockerCredentials>, I>>(object: I): DockerCredentials {
+  fromPartial<I extends Exact<DeepPartial<DockerCredentials>, I>>(
+    object: I
+  ): DockerCredentials {
     const message = createBaseDockerCredentials();
     message.server = object.server ?? "";
     message.username = object.username ?? "";
@@ -1220,7 +1330,10 @@ function createBaseSshCredentials(): SshCredentials {
 }
 
 export const SshCredentials = {
-  encode(message: SshCredentials, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SshCredentials,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.privateKey !== "") {
       writer.uint32(10).string(message.privateKey);
     }
@@ -1265,7 +1378,9 @@ export const SshCredentials = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SshCredentials>, I>>(object: I): SshCredentials {
+  fromPartial<I extends Exact<DeepPartial<SshCredentials>, I>>(
+    object: I
+  ): SshCredentials {
     const message = createBaseSshCredentials();
     message.privateKey = object.privateKey ?? "";
     message.knownHosts = object.knownHosts ?? "";
@@ -1278,11 +1393,14 @@ function createBaseOpaqueCredentials(): OpaqueCredentials {
 }
 
 export const OpaqueCredentials = {
-  encode(message: OpaqueCredentials, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: OpaqueCredentials,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     Object.entries(message.data).forEach(([key, value]) => {
       OpaqueCredentials_DataEntry.encode(
         { key: key as any, value },
-        writer.uint32(10).fork(),
+        writer.uint32(10).fork()
       ).ldelim();
     });
     return writer;
@@ -1296,7 +1414,10 @@ export const OpaqueCredentials = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = OpaqueCredentials_DataEntry.decode(reader, reader.uint32());
+          const entry1 = OpaqueCredentials_DataEntry.decode(
+            reader,
+            reader.uint32()
+          );
           if (entry1.value !== undefined) {
             message.data[entry1.key] = entry1.value;
           }
@@ -1312,10 +1433,13 @@ export const OpaqueCredentials = {
   fromJSON(object: any): OpaqueCredentials {
     return {
       data: isObject(object.data)
-        ? Object.entries(object.data).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-            acc[key] = String(value);
-            return acc;
-          }, {})
+        ? Object.entries(object.data).reduce<{ [key: string]: string }>(
+            (acc, [key, value]) => {
+              acc[key] = String(value);
+              return acc;
+            },
+            {}
+          )
         : {},
     };
   },
@@ -1331,7 +1455,9 @@ export const OpaqueCredentials = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<OpaqueCredentials>, I>>(object: I): OpaqueCredentials {
+  fromPartial<I extends Exact<DeepPartial<OpaqueCredentials>, I>>(
+    object: I
+  ): OpaqueCredentials {
     const message = createBaseOpaqueCredentials();
     message.data = Object.entries(object.data ?? {}).reduce<{
       [key: string]: string;
@@ -1352,7 +1478,7 @@ function createBaseOpaqueCredentials_DataEntry(): OpaqueCredentials_DataEntry {
 export const OpaqueCredentials_DataEntry = {
   encode(
     message: OpaqueCredentials_DataEntry,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
@@ -1363,7 +1489,10 @@ export const OpaqueCredentials_DataEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): OpaqueCredentials_DataEntry {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): OpaqueCredentials_DataEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOpaqueCredentials_DataEntry();
@@ -1399,7 +1528,7 @@ export const OpaqueCredentials_DataEntry = {
   },
 
   fromPartial<I extends Exact<DeepPartial<OpaqueCredentials_DataEntry>, I>>(
-    object: I,
+    object: I
   ): OpaqueCredentials_DataEntry {
     const message = createBaseOpaqueCredentials_DataEntry();
     message.key = object.key ?? "";
@@ -1413,7 +1542,10 @@ function createBaseSecretKeyReference(): SecretKeyReference {
 }
 
 export const SecretKeyReference = {
-  encode(message: SecretKeyReference, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SecretKeyReference,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -1458,7 +1590,9 @@ export const SecretKeyReference = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SecretKeyReference>, I>>(object: I): SecretKeyReference {
+  fromPartial<I extends Exact<DeepPartial<SecretKeyReference>, I>>(
+    object: I
+  ): SecretKeyReference {
     const message = createBaseSecretKeyReference();
     message.name = object.name ?? "";
     message.key = object.key ?? "";
@@ -1473,15 +1607,21 @@ function createBaseGetPackageRepositoryDetailRequest(): GetPackageRepositoryDeta
 export const GetPackageRepositoryDetailRequest = {
   encode(
     message: GetPackageRepositoryDetailRequest,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.packageRepoRef !== undefined) {
-      PackageRepositoryReference.encode(message.packageRepoRef, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryReference.encode(
+        message.packageRepoRef,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetPackageRepositoryDetailRequest {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GetPackageRepositoryDetailRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetPackageRepositoryDetailRequest();
@@ -1489,7 +1629,10 @@ export const GetPackageRepositoryDetailRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packageRepoRef = PackageRepositoryReference.decode(reader, reader.uint32());
+          message.packageRepoRef = PackageRepositoryReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1516,9 +1659,9 @@ export const GetPackageRepositoryDetailRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GetPackageRepositoryDetailRequest>, I>>(
-    object: I,
-  ): GetPackageRepositoryDetailRequest {
+  fromPartial<
+    I extends Exact<DeepPartial<GetPackageRepositoryDetailRequest>, I>
+  >(object: I): GetPackageRepositoryDetailRequest {
     const message = createBaseGetPackageRepositoryDetailRequest();
     message.packageRepoRef =
       object.packageRepoRef !== undefined && object.packageRepoRef !== null
@@ -1535,7 +1678,7 @@ function createBaseGetPackageRepositorySummariesRequest(): GetPackageRepositoryS
 export const GetPackageRepositorySummariesRequest = {
   encode(
     message: GetPackageRepositorySummariesRequest,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.context !== undefined) {
       Context.encode(message.context, writer.uint32(10).fork()).ldelim();
@@ -1543,7 +1686,10 @@ export const GetPackageRepositorySummariesRequest = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetPackageRepositorySummariesRequest {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GetPackageRepositorySummariesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetPackageRepositorySummariesRequest();
@@ -1563,20 +1709,24 @@ export const GetPackageRepositorySummariesRequest = {
 
   fromJSON(object: any): GetPackageRepositorySummariesRequest {
     return {
-      context: isSet(object.context) ? Context.fromJSON(object.context) : undefined,
+      context: isSet(object.context)
+        ? Context.fromJSON(object.context)
+        : undefined,
     };
   },
 
   toJSON(message: GetPackageRepositorySummariesRequest): unknown {
     const obj: any = {};
     message.context !== undefined &&
-      (obj.context = message.context ? Context.toJSON(message.context) : undefined);
+      (obj.context = message.context
+        ? Context.toJSON(message.context)
+        : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GetPackageRepositorySummariesRequest>, I>>(
-    object: I,
-  ): GetPackageRepositorySummariesRequest {
+  fromPartial<
+    I extends Exact<DeepPartial<GetPackageRepositorySummariesRequest>, I>
+  >(object: I): GetPackageRepositorySummariesRequest {
     const message = createBaseGetPackageRepositorySummariesRequest();
     message.context =
       object.context !== undefined && object.context !== null
@@ -1591,7 +1741,7 @@ function createBaseUpdatePackageRepositoryRequest(): UpdatePackageRepositoryRequ
     packageRepoRef: undefined,
     url: "",
     description: "",
-    interval: 0,
+    interval: undefined,
     tlsConfig: undefined,
     auth: undefined,
     customDetail: undefined,
@@ -1601,10 +1751,13 @@ function createBaseUpdatePackageRepositoryRequest(): UpdatePackageRepositoryRequ
 export const UpdatePackageRepositoryRequest = {
   encode(
     message: UpdatePackageRepositoryRequest,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.packageRepoRef !== undefined) {
-      PackageRepositoryReference.encode(message.packageRepoRef, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryReference.encode(
+        message.packageRepoRef,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.url !== "") {
       writer.uint32(18).string(message.url);
@@ -1612,14 +1765,20 @@ export const UpdatePackageRepositoryRequest = {
     if (message.description !== "") {
       writer.uint32(26).string(message.description);
     }
-    if (message.interval !== 0) {
-      writer.uint32(32).uint32(message.interval);
+    if (message.interval !== undefined) {
+      Duration.encode(message.interval, writer.uint32(34).fork()).ldelim();
     }
     if (message.tlsConfig !== undefined) {
-      PackageRepositoryTlsConfig.encode(message.tlsConfig, writer.uint32(42).fork()).ldelim();
+      PackageRepositoryTlsConfig.encode(
+        message.tlsConfig,
+        writer.uint32(42).fork()
+      ).ldelim();
     }
     if (message.auth !== undefined) {
-      PackageRepositoryAuth.encode(message.auth, writer.uint32(50).fork()).ldelim();
+      PackageRepositoryAuth.encode(
+        message.auth,
+        writer.uint32(50).fork()
+      ).ldelim();
     }
     if (message.customDetail !== undefined) {
       Any.encode(message.customDetail, writer.uint32(90).fork()).ldelim();
@@ -1627,7 +1786,10 @@ export const UpdatePackageRepositoryRequest = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): UpdatePackageRepositoryRequest {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): UpdatePackageRepositoryRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUpdatePackageRepositoryRequest();
@@ -1635,7 +1797,10 @@ export const UpdatePackageRepositoryRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packageRepoRef = PackageRepositoryReference.decode(reader, reader.uint32());
+          message.packageRepoRef = PackageRepositoryReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 2:
           message.url = reader.string();
@@ -1644,10 +1809,13 @@ export const UpdatePackageRepositoryRequest = {
           message.description = reader.string();
           break;
         case 4:
-          message.interval = reader.uint32();
+          message.interval = Duration.decode(reader, reader.uint32());
           break;
         case 5:
-          message.tlsConfig = PackageRepositoryTlsConfig.decode(reader, reader.uint32());
+          message.tlsConfig = PackageRepositoryTlsConfig.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 6:
           message.auth = PackageRepositoryAuth.decode(reader, reader.uint32());
@@ -1670,12 +1838,18 @@ export const UpdatePackageRepositoryRequest = {
         : undefined,
       url: isSet(object.url) ? String(object.url) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      interval: isSet(object.interval) ? Number(object.interval) : 0,
+      interval: isSet(object.interval)
+        ? Duration.fromJSON(object.interval)
+        : undefined,
       tlsConfig: isSet(object.tlsConfig)
         ? PackageRepositoryTlsConfig.fromJSON(object.tlsConfig)
         : undefined,
-      auth: isSet(object.auth) ? PackageRepositoryAuth.fromJSON(object.auth) : undefined,
-      customDetail: isSet(object.customDetail) ? Any.fromJSON(object.customDetail) : undefined,
+      auth: isSet(object.auth)
+        ? PackageRepositoryAuth.fromJSON(object.auth)
+        : undefined,
+      customDetail: isSet(object.customDetail)
+        ? Any.fromJSON(object.customDetail)
+        : undefined,
     };
   },
 
@@ -1686,21 +1860,29 @@ export const UpdatePackageRepositoryRequest = {
         ? PackageRepositoryReference.toJSON(message.packageRepoRef)
         : undefined);
     message.url !== undefined && (obj.url = message.url);
-    message.description !== undefined && (obj.description = message.description);
-    message.interval !== undefined && (obj.interval = Math.round(message.interval));
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.interval !== undefined &&
+      (obj.interval = message.interval
+        ? Duration.toJSON(message.interval)
+        : undefined);
     message.tlsConfig !== undefined &&
       (obj.tlsConfig = message.tlsConfig
         ? PackageRepositoryTlsConfig.toJSON(message.tlsConfig)
         : undefined);
     message.auth !== undefined &&
-      (obj.auth = message.auth ? PackageRepositoryAuth.toJSON(message.auth) : undefined);
+      (obj.auth = message.auth
+        ? PackageRepositoryAuth.toJSON(message.auth)
+        : undefined);
     message.customDetail !== undefined &&
-      (obj.customDetail = message.customDetail ? Any.toJSON(message.customDetail) : undefined);
+      (obj.customDetail = message.customDetail
+        ? Any.toJSON(message.customDetail)
+        : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<UpdatePackageRepositoryRequest>, I>>(
-    object: I,
+    object: I
   ): UpdatePackageRepositoryRequest {
     const message = createBaseUpdatePackageRepositoryRequest();
     message.packageRepoRef =
@@ -1709,7 +1891,10 @@ export const UpdatePackageRepositoryRequest = {
         : undefined;
     message.url = object.url ?? "";
     message.description = object.description ?? "";
-    message.interval = object.interval ?? 0;
+    message.interval =
+      object.interval !== undefined && object.interval !== null
+        ? Duration.fromPartial(object.interval)
+        : undefined;
     message.tlsConfig =
       object.tlsConfig !== undefined && object.tlsConfig !== null
         ? PackageRepositoryTlsConfig.fromPartial(object.tlsConfig)
@@ -1733,15 +1918,21 @@ function createBaseDeletePackageRepositoryRequest(): DeletePackageRepositoryRequ
 export const DeletePackageRepositoryRequest = {
   encode(
     message: DeletePackageRepositoryRequest,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.packageRepoRef !== undefined) {
-      PackageRepositoryReference.encode(message.packageRepoRef, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryReference.encode(
+        message.packageRepoRef,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): DeletePackageRepositoryRequest {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): DeletePackageRepositoryRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeletePackageRepositoryRequest();
@@ -1749,7 +1940,10 @@ export const DeletePackageRepositoryRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packageRepoRef = PackageRepositoryReference.decode(reader, reader.uint32());
+          message.packageRepoRef = PackageRepositoryReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1777,7 +1971,7 @@ export const DeletePackageRepositoryRequest = {
   },
 
   fromPartial<I extends Exact<DeepPartial<DeletePackageRepositoryRequest>, I>>(
-    object: I,
+    object: I
   ): DeletePackageRepositoryRequest {
     const message = createBaseDeletePackageRepositoryRequest();
     message.packageRepoRef =
@@ -1795,7 +1989,7 @@ function createBasePackageRepositoryReference(): PackageRepositoryReference {
 export const PackageRepositoryReference = {
   encode(
     message: PackageRepositoryReference,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.context !== undefined) {
       Context.encode(message.context, writer.uint32(10).fork()).ldelim();
@@ -1809,7 +2003,10 @@ export const PackageRepositoryReference = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryReference {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryReference {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryReference();
@@ -1835,7 +2032,9 @@ export const PackageRepositoryReference = {
 
   fromJSON(object: any): PackageRepositoryReference {
     return {
-      context: isSet(object.context) ? Context.fromJSON(object.context) : undefined,
+      context: isSet(object.context)
+        ? Context.fromJSON(object.context)
+        : undefined,
       identifier: isSet(object.identifier) ? String(object.identifier) : "",
       plugin: isSet(object.plugin) ? Plugin.fromJSON(object.plugin) : undefined,
     };
@@ -1844,7 +2043,9 @@ export const PackageRepositoryReference = {
   toJSON(message: PackageRepositoryReference): unknown {
     const obj: any = {};
     message.context !== undefined &&
-      (obj.context = message.context ? Context.toJSON(message.context) : undefined);
+      (obj.context = message.context
+        ? Context.toJSON(message.context)
+        : undefined);
     message.identifier !== undefined && (obj.identifier = message.identifier);
     message.plugin !== undefined &&
       (obj.plugin = message.plugin ? Plugin.toJSON(message.plugin) : undefined);
@@ -1852,7 +2053,7 @@ export const PackageRepositoryReference = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryReference>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryReference {
     const message = createBasePackageRepositoryReference();
     message.context =
@@ -1875,15 +2076,21 @@ function createBaseAddPackageRepositoryResponse(): AddPackageRepositoryResponse 
 export const AddPackageRepositoryResponse = {
   encode(
     message: AddPackageRepositoryResponse,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.packageRepoRef !== undefined) {
-      PackageRepositoryReference.encode(message.packageRepoRef, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryReference.encode(
+        message.packageRepoRef,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): AddPackageRepositoryResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): AddPackageRepositoryResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAddPackageRepositoryResponse();
@@ -1891,7 +2098,10 @@ export const AddPackageRepositoryResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packageRepoRef = PackageRepositoryReference.decode(reader, reader.uint32());
+          message.packageRepoRef = PackageRepositoryReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1919,7 +2129,7 @@ export const AddPackageRepositoryResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<AddPackageRepositoryResponse>, I>>(
-    object: I,
+    object: I
   ): AddPackageRepositoryResponse {
     const message = createBaseAddPackageRepositoryResponse();
     message.packageRepoRef =
@@ -1935,7 +2145,10 @@ function createBasePackageRepositoryStatus(): PackageRepositoryStatus {
 }
 
 export const PackageRepositoryStatus = {
-  encode(message: PackageRepositoryStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryStatus,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.ready === true) {
       writer.uint32(8).bool(message.ready);
     }
@@ -1948,7 +2161,10 @@ export const PackageRepositoryStatus = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryStatus {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryStatus {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryStatus();
@@ -1992,7 +2208,7 @@ export const PackageRepositoryStatus = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryStatus>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryStatus {
     const message = createBasePackageRepositoryStatus();
     message.ready = object.ready ?? false;
@@ -2010,7 +2226,7 @@ function createBasePackageRepositoryDetail(): PackageRepositoryDetail {
     namespaceScoped: false,
     type: "",
     url: "",
-    interval: 0,
+    interval: undefined,
     tlsConfig: undefined,
     auth: undefined,
     customDetail: undefined,
@@ -2019,9 +2235,15 @@ function createBasePackageRepositoryDetail(): PackageRepositoryDetail {
 }
 
 export const PackageRepositoryDetail = {
-  encode(message: PackageRepositoryDetail, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryDetail,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.packageRepoRef !== undefined) {
-      PackageRepositoryReference.encode(message.packageRepoRef, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryReference.encode(
+        message.packageRepoRef,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
@@ -2038,25 +2260,37 @@ export const PackageRepositoryDetail = {
     if (message.url !== "") {
       writer.uint32(50).string(message.url);
     }
-    if (message.interval !== 0) {
-      writer.uint32(56).uint32(message.interval);
+    if (message.interval !== undefined) {
+      Duration.encode(message.interval, writer.uint32(58).fork()).ldelim();
     }
     if (message.tlsConfig !== undefined) {
-      PackageRepositoryTlsConfig.encode(message.tlsConfig, writer.uint32(66).fork()).ldelim();
+      PackageRepositoryTlsConfig.encode(
+        message.tlsConfig,
+        writer.uint32(66).fork()
+      ).ldelim();
     }
     if (message.auth !== undefined) {
-      PackageRepositoryAuth.encode(message.auth, writer.uint32(74).fork()).ldelim();
+      PackageRepositoryAuth.encode(
+        message.auth,
+        writer.uint32(74).fork()
+      ).ldelim();
     }
     if (message.customDetail !== undefined) {
       Any.encode(message.customDetail, writer.uint32(82).fork()).ldelim();
     }
     if (message.status !== undefined) {
-      PackageRepositoryStatus.encode(message.status, writer.uint32(90).fork()).ldelim();
+      PackageRepositoryStatus.encode(
+        message.status,
+        writer.uint32(90).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryDetail {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryDetail {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryDetail();
@@ -2064,7 +2298,10 @@ export const PackageRepositoryDetail = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packageRepoRef = PackageRepositoryReference.decode(reader, reader.uint32());
+          message.packageRepoRef = PackageRepositoryReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 2:
           message.name = reader.string();
@@ -2082,10 +2319,13 @@ export const PackageRepositoryDetail = {
           message.url = reader.string();
           break;
         case 7:
-          message.interval = reader.uint32();
+          message.interval = Duration.decode(reader, reader.uint32());
           break;
         case 8:
-          message.tlsConfig = PackageRepositoryTlsConfig.decode(reader, reader.uint32());
+          message.tlsConfig = PackageRepositoryTlsConfig.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 9:
           message.auth = PackageRepositoryAuth.decode(reader, reader.uint32());
@@ -2094,7 +2334,10 @@ export const PackageRepositoryDetail = {
           message.customDetail = Any.decode(reader, reader.uint32());
           break;
         case 11:
-          message.status = PackageRepositoryStatus.decode(reader, reader.uint32());
+          message.status = PackageRepositoryStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -2111,16 +2354,26 @@ export const PackageRepositoryDetail = {
         : undefined,
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      namespaceScoped: isSet(object.namespaceScoped) ? Boolean(object.namespaceScoped) : false,
+      namespaceScoped: isSet(object.namespaceScoped)
+        ? Boolean(object.namespaceScoped)
+        : false,
       type: isSet(object.type) ? String(object.type) : "",
       url: isSet(object.url) ? String(object.url) : "",
-      interval: isSet(object.interval) ? Number(object.interval) : 0,
+      interval: isSet(object.interval)
+        ? Duration.fromJSON(object.interval)
+        : undefined,
       tlsConfig: isSet(object.tlsConfig)
         ? PackageRepositoryTlsConfig.fromJSON(object.tlsConfig)
         : undefined,
-      auth: isSet(object.auth) ? PackageRepositoryAuth.fromJSON(object.auth) : undefined,
-      customDetail: isSet(object.customDetail) ? Any.fromJSON(object.customDetail) : undefined,
-      status: isSet(object.status) ? PackageRepositoryStatus.fromJSON(object.status) : undefined,
+      auth: isSet(object.auth)
+        ? PackageRepositoryAuth.fromJSON(object.auth)
+        : undefined,
+      customDetail: isSet(object.customDetail)
+        ? Any.fromJSON(object.customDetail)
+        : undefined,
+      status: isSet(object.status)
+        ? PackageRepositoryStatus.fromJSON(object.status)
+        : undefined,
     };
   },
 
@@ -2131,26 +2384,37 @@ export const PackageRepositoryDetail = {
         ? PackageRepositoryReference.toJSON(message.packageRepoRef)
         : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.namespaceScoped !== undefined && (obj.namespaceScoped = message.namespaceScoped);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.namespaceScoped !== undefined &&
+      (obj.namespaceScoped = message.namespaceScoped);
     message.type !== undefined && (obj.type = message.type);
     message.url !== undefined && (obj.url = message.url);
-    message.interval !== undefined && (obj.interval = Math.round(message.interval));
+    message.interval !== undefined &&
+      (obj.interval = message.interval
+        ? Duration.toJSON(message.interval)
+        : undefined);
     message.tlsConfig !== undefined &&
       (obj.tlsConfig = message.tlsConfig
         ? PackageRepositoryTlsConfig.toJSON(message.tlsConfig)
         : undefined);
     message.auth !== undefined &&
-      (obj.auth = message.auth ? PackageRepositoryAuth.toJSON(message.auth) : undefined);
+      (obj.auth = message.auth
+        ? PackageRepositoryAuth.toJSON(message.auth)
+        : undefined);
     message.customDetail !== undefined &&
-      (obj.customDetail = message.customDetail ? Any.toJSON(message.customDetail) : undefined);
+      (obj.customDetail = message.customDetail
+        ? Any.toJSON(message.customDetail)
+        : undefined);
     message.status !== undefined &&
-      (obj.status = message.status ? PackageRepositoryStatus.toJSON(message.status) : undefined);
+      (obj.status = message.status
+        ? PackageRepositoryStatus.toJSON(message.status)
+        : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryDetail>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryDetail {
     const message = createBasePackageRepositoryDetail();
     message.packageRepoRef =
@@ -2162,7 +2426,10 @@ export const PackageRepositoryDetail = {
     message.namespaceScoped = object.namespaceScoped ?? false;
     message.type = object.type ?? "";
     message.url = object.url ?? "";
-    message.interval = object.interval ?? 0;
+    message.interval =
+      object.interval !== undefined && object.interval !== null
+        ? Duration.fromPartial(object.interval)
+        : undefined;
     message.tlsConfig =
       object.tlsConfig !== undefined && object.tlsConfig !== null
         ? PackageRepositoryTlsConfig.fromPartial(object.tlsConfig)
@@ -2190,15 +2457,21 @@ function createBaseGetPackageRepositoryDetailResponse(): GetPackageRepositoryDet
 export const GetPackageRepositoryDetailResponse = {
   encode(
     message: GetPackageRepositoryDetailResponse,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.detail !== undefined) {
-      PackageRepositoryDetail.encode(message.detail, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryDetail.encode(
+        message.detail,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetPackageRepositoryDetailResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GetPackageRepositoryDetailResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetPackageRepositoryDetailResponse();
@@ -2206,7 +2479,10 @@ export const GetPackageRepositoryDetailResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.detail = PackageRepositoryDetail.decode(reader, reader.uint32());
+          message.detail = PackageRepositoryDetail.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -2218,20 +2494,24 @@ export const GetPackageRepositoryDetailResponse = {
 
   fromJSON(object: any): GetPackageRepositoryDetailResponse {
     return {
-      detail: isSet(object.detail) ? PackageRepositoryDetail.fromJSON(object.detail) : undefined,
+      detail: isSet(object.detail)
+        ? PackageRepositoryDetail.fromJSON(object.detail)
+        : undefined,
     };
   },
 
   toJSON(message: GetPackageRepositoryDetailResponse): unknown {
     const obj: any = {};
     message.detail !== undefined &&
-      (obj.detail = message.detail ? PackageRepositoryDetail.toJSON(message.detail) : undefined);
+      (obj.detail = message.detail
+        ? PackageRepositoryDetail.toJSON(message.detail)
+        : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GetPackageRepositoryDetailResponse>, I>>(
-    object: I,
-  ): GetPackageRepositoryDetailResponse {
+  fromPartial<
+    I extends Exact<DeepPartial<GetPackageRepositoryDetailResponse>, I>
+  >(object: I): GetPackageRepositoryDetailResponse {
     const message = createBaseGetPackageRepositoryDetailResponse();
     message.detail =
       object.detail !== undefined && object.detail !== null
@@ -2254,9 +2534,15 @@ function createBasePackageRepositorySummary(): PackageRepositorySummary {
 }
 
 export const PackageRepositorySummary = {
-  encode(message: PackageRepositorySummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositorySummary,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.packageRepoRef !== undefined) {
-      PackageRepositoryReference.encode(message.packageRepoRef, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryReference.encode(
+        message.packageRepoRef,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
@@ -2274,12 +2560,18 @@ export const PackageRepositorySummary = {
       writer.uint32(50).string(message.url);
     }
     if (message.status !== undefined) {
-      PackageRepositoryStatus.encode(message.status, writer.uint32(58).fork()).ldelim();
+      PackageRepositoryStatus.encode(
+        message.status,
+        writer.uint32(58).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositorySummary {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositorySummary {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositorySummary();
@@ -2287,7 +2579,10 @@ export const PackageRepositorySummary = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packageRepoRef = PackageRepositoryReference.decode(reader, reader.uint32());
+          message.packageRepoRef = PackageRepositoryReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 2:
           message.name = reader.string();
@@ -2305,7 +2600,10 @@ export const PackageRepositorySummary = {
           message.url = reader.string();
           break;
         case 7:
-          message.status = PackageRepositoryStatus.decode(reader, reader.uint32());
+          message.status = PackageRepositoryStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -2322,10 +2620,14 @@ export const PackageRepositorySummary = {
         : undefined,
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      namespaceScoped: isSet(object.namespaceScoped) ? Boolean(object.namespaceScoped) : false,
+      namespaceScoped: isSet(object.namespaceScoped)
+        ? Boolean(object.namespaceScoped)
+        : false,
       type: isSet(object.type) ? String(object.type) : "",
       url: isSet(object.url) ? String(object.url) : "",
-      status: isSet(object.status) ? PackageRepositoryStatus.fromJSON(object.status) : undefined,
+      status: isSet(object.status)
+        ? PackageRepositoryStatus.fromJSON(object.status)
+        : undefined,
     };
   },
 
@@ -2336,17 +2638,21 @@ export const PackageRepositorySummary = {
         ? PackageRepositoryReference.toJSON(message.packageRepoRef)
         : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.namespaceScoped !== undefined && (obj.namespaceScoped = message.namespaceScoped);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.namespaceScoped !== undefined &&
+      (obj.namespaceScoped = message.namespaceScoped);
     message.type !== undefined && (obj.type = message.type);
     message.url !== undefined && (obj.url = message.url);
     message.status !== undefined &&
-      (obj.status = message.status ? PackageRepositoryStatus.toJSON(message.status) : undefined);
+      (obj.status = message.status
+        ? PackageRepositoryStatus.toJSON(message.status)
+        : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositorySummary>, I>>(
-    object: I,
+    object: I
   ): PackageRepositorySummary {
     const message = createBasePackageRepositorySummary();
     message.packageRepoRef =
@@ -2373,7 +2679,7 @@ function createBaseGetPackageRepositorySummariesResponse(): GetPackageRepository
 export const GetPackageRepositorySummariesResponse = {
   encode(
     message: GetPackageRepositorySummariesResponse,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     for (const v of message.packageRepositorySummaries) {
       PackageRepositorySummary.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2381,7 +2687,10 @@ export const GetPackageRepositorySummariesResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetPackageRepositorySummariesResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GetPackageRepositorySummariesResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetPackageRepositorySummariesResponse();
@@ -2390,7 +2699,7 @@ export const GetPackageRepositorySummariesResponse = {
       switch (tag >>> 3) {
         case 1:
           message.packageRepositorySummaries.push(
-            PackageRepositorySummary.decode(reader, reader.uint32()),
+            PackageRepositorySummary.decode(reader, reader.uint32())
           );
           break;
         default:
@@ -2403,8 +2712,12 @@ export const GetPackageRepositorySummariesResponse = {
 
   fromJSON(object: any): GetPackageRepositorySummariesResponse {
     return {
-      packageRepositorySummaries: Array.isArray(object?.packageRepositorySummaries)
-        ? object.packageRepositorySummaries.map((e: any) => PackageRepositorySummary.fromJSON(e))
+      packageRepositorySummaries: Array.isArray(
+        object?.packageRepositorySummaries
+      )
+        ? object.packageRepositorySummaries.map((e: any) =>
+            PackageRepositorySummary.fromJSON(e)
+          )
         : [],
     };
   },
@@ -2412,8 +2725,8 @@ export const GetPackageRepositorySummariesResponse = {
   toJSON(message: GetPackageRepositorySummariesResponse): unknown {
     const obj: any = {};
     if (message.packageRepositorySummaries) {
-      obj.packageRepositorySummaries = message.packageRepositorySummaries.map(e =>
-        e ? PackageRepositorySummary.toJSON(e) : undefined,
+      obj.packageRepositorySummaries = message.packageRepositorySummaries.map(
+        (e) => (e ? PackageRepositorySummary.toJSON(e) : undefined)
       );
     } else {
       obj.packageRepositorySummaries = [];
@@ -2421,12 +2734,14 @@ export const GetPackageRepositorySummariesResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GetPackageRepositorySummariesResponse>, I>>(
-    object: I,
-  ): GetPackageRepositorySummariesResponse {
+  fromPartial<
+    I extends Exact<DeepPartial<GetPackageRepositorySummariesResponse>, I>
+  >(object: I): GetPackageRepositorySummariesResponse {
     const message = createBaseGetPackageRepositorySummariesResponse();
     message.packageRepositorySummaries =
-      object.packageRepositorySummaries?.map(e => PackageRepositorySummary.fromPartial(e)) || [];
+      object.packageRepositorySummaries?.map((e) =>
+        PackageRepositorySummary.fromPartial(e)
+      ) || [];
     return message;
   },
 };
@@ -2438,15 +2753,21 @@ function createBaseUpdatePackageRepositoryResponse(): UpdatePackageRepositoryRes
 export const UpdatePackageRepositoryResponse = {
   encode(
     message: UpdatePackageRepositoryResponse,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.packageRepoRef !== undefined) {
-      PackageRepositoryReference.encode(message.packageRepoRef, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryReference.encode(
+        message.packageRepoRef,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): UpdatePackageRepositoryResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): UpdatePackageRepositoryResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUpdatePackageRepositoryResponse();
@@ -2454,7 +2775,10 @@ export const UpdatePackageRepositoryResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.packageRepoRef = PackageRepositoryReference.decode(reader, reader.uint32());
+          message.packageRepoRef = PackageRepositoryReference.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -2482,7 +2806,7 @@ export const UpdatePackageRepositoryResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<UpdatePackageRepositoryResponse>, I>>(
-    object: I,
+    object: I
   ): UpdatePackageRepositoryResponse {
     const message = createBaseUpdatePackageRepositoryResponse();
     message.packageRepoRef =
@@ -2498,11 +2822,17 @@ function createBaseDeletePackageRepositoryResponse(): DeletePackageRepositoryRes
 }
 
 export const DeletePackageRepositoryResponse = {
-  encode(_: DeletePackageRepositoryResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: DeletePackageRepositoryResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): DeletePackageRepositoryResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): DeletePackageRepositoryResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeletePackageRepositoryResponse();
@@ -2527,7 +2857,7 @@ export const DeletePackageRepositoryResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<DeletePackageRepositoryResponse>, I>>(
-    _: I,
+    _: I
   ): DeletePackageRepositoryResponse {
     const message = createBaseDeletePackageRepositoryResponse();
     return message;
@@ -2538,23 +2868,23 @@ export const DeletePackageRepositoryResponse = {
 export interface RepositoriesService {
   AddPackageRepository(
     request: DeepPartial<AddPackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<AddPackageRepositoryResponse>;
   GetPackageRepositoryDetail(
     request: DeepPartial<GetPackageRepositoryDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositoryDetailResponse>;
   GetPackageRepositorySummaries(
     request: DeepPartial<GetPackageRepositorySummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositorySummariesResponse>;
   UpdatePackageRepository(
     request: DeepPartial<UpdatePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<UpdatePackageRepositoryResponse>;
   DeletePackageRepository(
     request: DeepPartial<DeletePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<DeletePackageRepositoryResponse>;
 }
 
@@ -2564,64 +2894,66 @@ export class RepositoriesServiceClientImpl implements RepositoriesService {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.AddPackageRepository = this.AddPackageRepository.bind(this);
-    this.GetPackageRepositoryDetail = this.GetPackageRepositoryDetail.bind(this);
-    this.GetPackageRepositorySummaries = this.GetPackageRepositorySummaries.bind(this);
+    this.GetPackageRepositoryDetail =
+      this.GetPackageRepositoryDetail.bind(this);
+    this.GetPackageRepositorySummaries =
+      this.GetPackageRepositorySummaries.bind(this);
     this.UpdatePackageRepository = this.UpdatePackageRepository.bind(this);
     this.DeletePackageRepository = this.DeletePackageRepository.bind(this);
   }
 
   AddPackageRepository(
     request: DeepPartial<AddPackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<AddPackageRepositoryResponse> {
     return this.rpc.unary(
       RepositoriesServiceAddPackageRepositoryDesc,
       AddPackageRepositoryRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetPackageRepositoryDetail(
     request: DeepPartial<GetPackageRepositoryDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositoryDetailResponse> {
     return this.rpc.unary(
       RepositoriesServiceGetPackageRepositoryDetailDesc,
       GetPackageRepositoryDetailRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetPackageRepositorySummaries(
     request: DeepPartial<GetPackageRepositorySummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositorySummariesResponse> {
     return this.rpc.unary(
       RepositoriesServiceGetPackageRepositorySummariesDesc,
       GetPackageRepositorySummariesRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   UpdatePackageRepository(
     request: DeepPartial<UpdatePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<UpdatePackageRepositoryResponse> {
     return this.rpc.unary(
       RepositoriesServiceUpdatePackageRepositoryDesc,
       UpdatePackageRepositoryRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   DeletePackageRepository(
     request: DeepPartial<DeletePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<DeletePackageRepositoryResponse> {
     return this.rpc.unary(
       RepositoriesServiceDeletePackageRepositoryDesc,
       DeletePackageRepositoryRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 }
@@ -2630,117 +2962,123 @@ export const RepositoriesServiceDesc = {
   serviceName: "kubeappsapis.core.packages.v1alpha1.RepositoriesService",
 };
 
-export const RepositoriesServiceAddPackageRepositoryDesc: UnaryMethodDefinitionish = {
-  methodName: "AddPackageRepository",
-  service: RepositoriesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return AddPackageRepositoryRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...AddPackageRepositoryResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const RepositoriesServiceAddPackageRepositoryDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "AddPackageRepository",
+    service: RepositoriesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return AddPackageRepositoryRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...AddPackageRepositoryResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
-export const RepositoriesServiceGetPackageRepositoryDetailDesc: UnaryMethodDefinitionish = {
-  methodName: "GetPackageRepositoryDetail",
-  service: RepositoriesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return GetPackageRepositoryDetailRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...GetPackageRepositoryDetailResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const RepositoriesServiceGetPackageRepositoryDetailDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "GetPackageRepositoryDetail",
+    service: RepositoriesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return GetPackageRepositoryDetailRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...GetPackageRepositoryDetailResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
-export const RepositoriesServiceGetPackageRepositorySummariesDesc: UnaryMethodDefinitionish = {
-  methodName: "GetPackageRepositorySummaries",
-  service: RepositoriesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return GetPackageRepositorySummariesRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...GetPackageRepositorySummariesResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const RepositoriesServiceGetPackageRepositorySummariesDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "GetPackageRepositorySummaries",
+    service: RepositoriesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return GetPackageRepositorySummariesRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...GetPackageRepositorySummariesResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
-export const RepositoriesServiceUpdatePackageRepositoryDesc: UnaryMethodDefinitionish = {
-  methodName: "UpdatePackageRepository",
-  service: RepositoriesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return UpdatePackageRepositoryRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...UpdatePackageRepositoryResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const RepositoriesServiceUpdatePackageRepositoryDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "UpdatePackageRepository",
+    service: RepositoriesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return UpdatePackageRepositoryRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...UpdatePackageRepositoryResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
-export const RepositoriesServiceDeletePackageRepositoryDesc: UnaryMethodDefinitionish = {
-  methodName: "DeletePackageRepository",
-  service: RepositoriesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return DeletePackageRepositoryRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...DeletePackageRepositoryResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const RepositoriesServiceDeletePackageRepositoryDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "DeletePackageRepository",
+    service: RepositoriesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return DeletePackageRepositoryRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...DeletePackageRepositoryResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
-interface UnaryMethodDefinitionishR extends grpc.UnaryMethodDefinition<any, any> {
+interface UnaryMethodDefinitionishR
+  extends grpc.UnaryMethodDefinition<any, any> {
   requestStream: any;
   responseStream: any;
 }
@@ -2751,7 +3089,7 @@ interface Rpc {
   unary<T extends UnaryMethodDefinitionish>(
     methodDesc: T,
     request: any,
-    metadata: grpc.Metadata | undefined,
+    metadata: grpc.Metadata | undefined
   ): Promise<any>;
 }
 
@@ -2771,7 +3109,7 @@ export class GrpcWebImpl {
 
       debug?: boolean;
       metadata?: grpc.Metadata;
-    },
+    }
   ) {
     this.host = host;
     this.options = options;
@@ -2780,7 +3118,7 @@ export class GrpcWebImpl {
   unary<T extends UnaryMethodDefinitionish>(
     methodDesc: T,
     _request: any,
-    metadata: grpc.Metadata | undefined,
+    metadata: grpc.Metadata | undefined
   ): Promise<any> {
     const request = { ..._request, ...methodDesc.requestType };
     const maybeCombinedMetadata =
@@ -2812,7 +3150,14 @@ export class GrpcWebImpl {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -2827,7 +3172,10 @@ export type DeepPartial<T> = T extends Builtin
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P>>, never>;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

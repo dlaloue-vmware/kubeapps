@@ -6,6 +6,8 @@ package plugin_test
 import (
 	corev1 "github.com/vmware-tanzu/kubeapps/cmd/kubeapps-apis/gen/core/packages/v1alpha1"
 	plugins "github.com/vmware-tanzu/kubeapps/cmd/kubeapps-apis/gen/core/plugins/v1alpha1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"time"
 )
 
 const (
@@ -173,7 +175,7 @@ func MakePackageRepositoryDetail(name string, plugin *plugins.Plugin) *corev1.Pa
 		NamespaceScoped: false,
 		Type:            "helm",
 		Url:             DefaultRepoURL,
-		Interval:        DefaultRepoInterval,
+		Interval:        &metav1.Duration{Duration: DefaultRepoInterval * time.Second},
 		TlsConfig:       nil,
 		Auth:            nil,
 		CustomDetail:    nil,

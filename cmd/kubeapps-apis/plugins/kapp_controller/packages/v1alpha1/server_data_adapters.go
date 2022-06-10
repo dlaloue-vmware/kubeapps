@@ -6,11 +6,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/vmware-tanzu/kubeapps/cmd/kubeapps-apis/plugins/pkg/statuserror"
-	"google.golang.org/protobuf/types/known/anypb"
-	"strings"
-	"time"
-
 	kappctrlv1alpha1 "github.com/vmware-tanzu/carvel-kapp-controller/pkg/apis/kappctrl/v1alpha1"
 	packagingv1alpha1 "github.com/vmware-tanzu/carvel-kapp-controller/pkg/apis/packaging/v1alpha1"
 	datapackagingv1alpha1 "github.com/vmware-tanzu/carvel-kapp-controller/pkg/apiserver/apis/datapackaging/v1alpha1"
@@ -20,11 +15,14 @@ import (
 	corev1 "github.com/vmware-tanzu/kubeapps/cmd/kubeapps-apis/gen/core/packages/v1alpha1"
 	kappcorev1 "github.com/vmware-tanzu/kubeapps/cmd/kubeapps-apis/gen/plugins/kapp_controller/packages/v1alpha1"
 	"github.com/vmware-tanzu/kubeapps/cmd/kubeapps-apis/plugins/pkg/pkgutils"
+	"github.com/vmware-tanzu/kubeapps/cmd/kubeapps-apis/plugins/pkg/statuserror"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 	k8scorev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	log "k8s.io/klog/v2"
+	"strings"
 )
 
 const (
@@ -310,7 +308,7 @@ func (s *Server) buildInstalledPackageDetail(pkgInstall *packagingv1alpha1.Packa
 
 	// Some fields would require an extra nil check before being populated
 	if app.Spec.SyncPeriod != nil {
-		installedPackageDetail.ReconciliationOptions.Interval = int32(app.Spec.SyncPeriod.Seconds())
+		installedPackageDetail.ReconciliationOptions.Interval = app.Spec.SyncPeriod
 	}
 
 	if pkgInstall.Status.Conditions != nil && len(pkgInstall.Status.Conditions) > 0 {
@@ -400,11 +398,7 @@ func (s *Server) buildPkgInstall(installedPackageName, targetCluster, targetName
 	}
 
 	if reconciliationOptions != nil {
-		if reconciliationOptions.Interval > 0 {
-			pkgInstall.Spec.SyncPeriod = &metav1.Duration{
-				Duration: time.Duration(reconciliationOptions.Interval) * time.Second,
-			}
-		}
+		pkgInstall.Spec.SyncPeriod = reconciliationOptions.Interval
 		pkgInstall.Spec.ServiceAccountName = reconciliationOptions.ServiceAccountName
 		pkgInstall.Spec.Paused = reconciliationOptions.Suspend
 	}
@@ -493,7 +487,7 @@ func (s *Server) buildPackageRepository(pkgRepository *packagingv1alpha1.Package
 
 	// synchronization
 	if pkgRepository.Spec.SyncPeriod != nil {
-		repository.Interval = uint32(pkgRepository.Spec.SyncPeriod.Seconds())
+		repository.Interval = pkgRepository.Spec.SyncPeriod
 	}
 
 	// handle fetch-specific configuration
@@ -683,15 +677,11 @@ func (s *Server) buildPkgRepositoryUpdate(request *corev1.UpdatePackageRepositor
 	return repository, nil
 }
 
-func (s *Server) buildPkgRepositorySpec(rptype string, interval uint32, url string, auth *corev1.PackageRepositoryAuth, pkgSecret *k8scorev1.Secret, details *kappcorev1.PackageRepositoryCustomDetail) packagingv1alpha1.PackageRepositorySpec {
+func (s *Server) buildPkgRepositorySpec(rptype string, interval *metav1.Duration, url string, auth *corev1.PackageRepositoryAuth, pkgSecret *k8scorev1.Secret, details *kappcorev1.PackageRepositoryCustomDetail) packagingv1alpha1.PackageRepositorySpec {
 	// spec stub
 	spec := packagingv1alpha1.PackageRepositorySpec{
-		Fetch: &packagingv1alpha1.PackageRepositoryFetch{},
-	}
-
-	// synchronization
-	if interval > 0 {
-		spec.SyncPeriod = &metav1.Duration{Duration: time.Duration(interval) * time.Second}
+		SyncPeriod: interval,
+		Fetch:      &packagingv1alpha1.PackageRepositoryFetch{},
 	}
 
 	// auth

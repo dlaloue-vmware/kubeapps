@@ -9,6 +9,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "kubeappsapis/core/plugins/v1alpha1/plugins.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 
 // The core.packages defines the request and response types for API calls
 // interacting with packages, as well as the PackagesService to be implemented.
@@ -878,8 +879,8 @@ message InstalledPackageStatus {
 message ReconciliationOptions {
   // Reconciliation Interval
   //
-  // The interval with which the package is checked for reconciliation (in seconds)
-  int32 interval = 1;
+  // The interval with which the package is checked for reconciliation
+  k8s.io.apimachinery.pkg.apis.meta.v1.Duration interval = 1;
 
   // Suspend
   //

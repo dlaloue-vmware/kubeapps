@@ -439,9 +439,8 @@ func (s *Server) updateRelease(ctx context.Context, packageRef *corev1.Installed
 
 	setInterval, setServiceAccount := false, false
 	if reconcile != nil {
-		if reconcile.Interval > 0 {
-			reconcileInterval := (time.Duration(reconcile.Interval) * time.Second)
-			rel.Spec.Interval = metav1.Duration{Duration: reconcileInterval}
+		if reconcile.Interval != nil {
+			rel.Spec.Interval = *reconcile.Interval
 			setInterval = true
 		}
 		if reconcile.ServiceAccountName != "" {
@@ -538,8 +537,8 @@ func (s *Server) newFluxHelmRelease(chart *models.Chart, targetName types.Namesp
 
 	reconcileInterval := defaultReconcileInterval // unless explicitly specified
 	if reconcile != nil {
-		if reconcile.Interval > 0 {
-			reconcileInterval = metav1.Duration{Duration: (time.Duration(reconcile.Interval) * time.Second)}
+		if reconcile.Interval != nil {
+			reconcileInterval = *reconcile.Interval
 		}
 		fluxRelease.Spec.Suspend = reconcile.Suspend
 		if reconcile.ServiceAccountName != "" {
@@ -634,7 +633,7 @@ func installedPackageStatus(rel helmv2.HelmRelease) *corev1.InstalledPackageStat
 
 func installedPackageReconciliationOptions(rel *helmv2.HelmRelease) *corev1.ReconciliationOptions {
 	reconciliationOptions := &corev1.ReconciliationOptions{}
-	reconciliationOptions.Interval = int32(rel.Spec.Interval.Seconds())
+	reconciliationOptions.Interval = &rel.Spec.Interval
 	reconciliationOptions.Suspend = rel.Spec.Suspend
 	reconciliationOptions.ServiceAccountName = rel.Spec.ServiceAccountName
 	return reconciliationOptions

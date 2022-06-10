@@ -36,7 +36,8 @@ import {
 } from "../../../../../kubeappsapis/core/packages/v1alpha1/repositories";
 import { BrowserHeaders } from "browser-headers";
 
-export const protobufPackage = "kubeappsapis.plugins.kapp_controller.packages.v1alpha1";
+export const protobufPackage =
+  "kubeappsapis.plugins.kapp_controller.packages.v1alpha1";
 
 /**
  * custom fields to support other carvel repository types
@@ -116,15 +117,21 @@ function createBasePackageRepositoryCustomDetail(): PackageRepositoryCustomDetai
 export const PackageRepositoryCustomDetail = {
   encode(
     message: PackageRepositoryCustomDetail,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.fetch !== undefined) {
-      PackageRepositoryFetch.encode(message.fetch, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryFetch.encode(
+        message.fetch,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryCustomDetail {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryCustomDetail {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryCustomDetail();
@@ -132,7 +139,10 @@ export const PackageRepositoryCustomDetail = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.fetch = PackageRepositoryFetch.decode(reader, reader.uint32());
+          message.fetch = PackageRepositoryFetch.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -144,19 +154,23 @@ export const PackageRepositoryCustomDetail = {
 
   fromJSON(object: any): PackageRepositoryCustomDetail {
     return {
-      fetch: isSet(object.fetch) ? PackageRepositoryFetch.fromJSON(object.fetch) : undefined,
+      fetch: isSet(object.fetch)
+        ? PackageRepositoryFetch.fromJSON(object.fetch)
+        : undefined,
     };
   },
 
   toJSON(message: PackageRepositoryCustomDetail): unknown {
     const obj: any = {};
     message.fetch !== undefined &&
-      (obj.fetch = message.fetch ? PackageRepositoryFetch.toJSON(message.fetch) : undefined);
+      (obj.fetch = message.fetch
+        ? PackageRepositoryFetch.toJSON(message.fetch)
+        : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryCustomDetail>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryCustomDetail {
     const message = createBasePackageRepositoryCustomDetail();
     message.fetch =
@@ -178,26 +192,47 @@ function createBasePackageRepositoryFetch(): PackageRepositoryFetch {
 }
 
 export const PackageRepositoryFetch = {
-  encode(message: PackageRepositoryFetch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryFetch,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.imgpkgBundle !== undefined) {
-      PackageRepositoryImgpkg.encode(message.imgpkgBundle, writer.uint32(10).fork()).ldelim();
+      PackageRepositoryImgpkg.encode(
+        message.imgpkgBundle,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.image !== undefined) {
-      PackageRepositoryImage.encode(message.image, writer.uint32(18).fork()).ldelim();
+      PackageRepositoryImage.encode(
+        message.image,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     if (message.git !== undefined) {
-      PackageRepositoryGit.encode(message.git, writer.uint32(26).fork()).ldelim();
+      PackageRepositoryGit.encode(
+        message.git,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     if (message.http !== undefined) {
-      PackageRepositoryHttp.encode(message.http, writer.uint32(34).fork()).ldelim();
+      PackageRepositoryHttp.encode(
+        message.http,
+        writer.uint32(34).fork()
+      ).ldelim();
     }
     if (message.inline !== undefined) {
-      PackageRepositoryInline.encode(message.inline, writer.uint32(42).fork()).ldelim();
+      PackageRepositoryInline.encode(
+        message.inline,
+        writer.uint32(42).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryFetch {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryFetch {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryFetch();
@@ -205,10 +240,16 @@ export const PackageRepositoryFetch = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.imgpkgBundle = PackageRepositoryImgpkg.decode(reader, reader.uint32());
+          message.imgpkgBundle = PackageRepositoryImgpkg.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 2:
-          message.image = PackageRepositoryImage.decode(reader, reader.uint32());
+          message.image = PackageRepositoryImage.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 3:
           message.git = PackageRepositoryGit.decode(reader, reader.uint32());
@@ -217,7 +258,10 @@ export const PackageRepositoryFetch = {
           message.http = PackageRepositoryHttp.decode(reader, reader.uint32());
           break;
         case 5:
-          message.inline = PackageRepositoryInline.decode(reader, reader.uint32());
+          message.inline = PackageRepositoryInline.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -232,10 +276,18 @@ export const PackageRepositoryFetch = {
       imgpkgBundle: isSet(object.imgpkgBundle)
         ? PackageRepositoryImgpkg.fromJSON(object.imgpkgBundle)
         : undefined,
-      image: isSet(object.image) ? PackageRepositoryImage.fromJSON(object.image) : undefined,
-      git: isSet(object.git) ? PackageRepositoryGit.fromJSON(object.git) : undefined,
-      http: isSet(object.http) ? PackageRepositoryHttp.fromJSON(object.http) : undefined,
-      inline: isSet(object.inline) ? PackageRepositoryInline.fromJSON(object.inline) : undefined,
+      image: isSet(object.image)
+        ? PackageRepositoryImage.fromJSON(object.image)
+        : undefined,
+      git: isSet(object.git)
+        ? PackageRepositoryGit.fromJSON(object.git)
+        : undefined,
+      http: isSet(object.http)
+        ? PackageRepositoryHttp.fromJSON(object.http)
+        : undefined,
+      inline: isSet(object.inline)
+        ? PackageRepositoryInline.fromJSON(object.inline)
+        : undefined,
     };
   },
 
@@ -246,18 +298,26 @@ export const PackageRepositoryFetch = {
         ? PackageRepositoryImgpkg.toJSON(message.imgpkgBundle)
         : undefined);
     message.image !== undefined &&
-      (obj.image = message.image ? PackageRepositoryImage.toJSON(message.image) : undefined);
+      (obj.image = message.image
+        ? PackageRepositoryImage.toJSON(message.image)
+        : undefined);
     message.git !== undefined &&
-      (obj.git = message.git ? PackageRepositoryGit.toJSON(message.git) : undefined);
+      (obj.git = message.git
+        ? PackageRepositoryGit.toJSON(message.git)
+        : undefined);
     message.http !== undefined &&
-      (obj.http = message.http ? PackageRepositoryHttp.toJSON(message.http) : undefined);
+      (obj.http = message.http
+        ? PackageRepositoryHttp.toJSON(message.http)
+        : undefined);
     message.inline !== undefined &&
-      (obj.inline = message.inline ? PackageRepositoryInline.toJSON(message.inline) : undefined);
+      (obj.inline = message.inline
+        ? PackageRepositoryInline.toJSON(message.inline)
+        : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryFetch>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryFetch {
     const message = createBasePackageRepositoryFetch();
     message.imgpkgBundle =
@@ -289,14 +349,23 @@ function createBasePackageRepositoryImgpkg(): PackageRepositoryImgpkg {
 }
 
 export const PackageRepositoryImgpkg = {
-  encode(message: PackageRepositoryImgpkg, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryImgpkg,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.tagSelection !== undefined) {
-      VersionSelection.encode(message.tagSelection, writer.uint32(10).fork()).ldelim();
+      VersionSelection.encode(
+        message.tagSelection,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryImgpkg {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryImgpkg {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryImgpkg();
@@ -304,7 +373,10 @@ export const PackageRepositoryImgpkg = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.tagSelection = VersionSelection.decode(reader, reader.uint32());
+          message.tagSelection = VersionSelection.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -332,7 +404,7 @@ export const PackageRepositoryImgpkg = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryImgpkg>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryImgpkg {
     const message = createBasePackageRepositoryImgpkg();
     message.tagSelection =
@@ -348,9 +420,15 @@ function createBasePackageRepositoryImage(): PackageRepositoryImage {
 }
 
 export const PackageRepositoryImage = {
-  encode(message: PackageRepositoryImage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryImage,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.tagSelection !== undefined) {
-      VersionSelection.encode(message.tagSelection, writer.uint32(10).fork()).ldelim();
+      VersionSelection.encode(
+        message.tagSelection,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.subPath !== "") {
       writer.uint32(18).string(message.subPath);
@@ -358,7 +436,10 @@ export const PackageRepositoryImage = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryImage {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryImage {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryImage();
@@ -366,7 +447,10 @@ export const PackageRepositoryImage = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.tagSelection = VersionSelection.decode(reader, reader.uint32());
+          message.tagSelection = VersionSelection.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 2:
           message.subPath = reader.string();
@@ -399,7 +483,7 @@ export const PackageRepositoryImage = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryImage>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryImage {
     const message = createBasePackageRepositoryImage();
     message.tagSelection =
@@ -421,12 +505,18 @@ function createBasePackageRepositoryGit(): PackageRepositoryGit {
 }
 
 export const PackageRepositoryGit = {
-  encode(message: PackageRepositoryGit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryGit,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.ref !== "") {
       writer.uint32(10).string(message.ref);
     }
     if (message.refSelection !== undefined) {
-      VersionSelection.encode(message.refSelection, writer.uint32(18).fork()).ldelim();
+      VersionSelection.encode(
+        message.refSelection,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     if (message.subPath !== "") {
       writer.uint32(26).string(message.subPath);
@@ -437,7 +527,10 @@ export const PackageRepositoryGit = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryGit {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryGit {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryGit();
@@ -448,7 +541,10 @@ export const PackageRepositoryGit = {
           message.ref = reader.string();
           break;
         case 2:
-          message.refSelection = VersionSelection.decode(reader, reader.uint32());
+          message.refSelection = VersionSelection.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 3:
           message.subPath = reader.string();
@@ -471,7 +567,9 @@ export const PackageRepositoryGit = {
         ? VersionSelection.fromJSON(object.refSelection)
         : undefined,
       subPath: isSet(object.subPath) ? String(object.subPath) : "",
-      lfsSkipSmudge: isSet(object.lfsSkipSmudge) ? Boolean(object.lfsSkipSmudge) : false,
+      lfsSkipSmudge: isSet(object.lfsSkipSmudge)
+        ? Boolean(object.lfsSkipSmudge)
+        : false,
     };
   },
 
@@ -483,12 +581,13 @@ export const PackageRepositoryGit = {
         ? VersionSelection.toJSON(message.refSelection)
         : undefined);
     message.subPath !== undefined && (obj.subPath = message.subPath);
-    message.lfsSkipSmudge !== undefined && (obj.lfsSkipSmudge = message.lfsSkipSmudge);
+    message.lfsSkipSmudge !== undefined &&
+      (obj.lfsSkipSmudge = message.lfsSkipSmudge);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryGit>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryGit {
     const message = createBasePackageRepositoryGit();
     message.ref = object.ref ?? "";
@@ -507,7 +606,10 @@ function createBasePackageRepositoryHttp(): PackageRepositoryHttp {
 }
 
 export const PackageRepositoryHttp = {
-  encode(message: PackageRepositoryHttp, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryHttp,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.subPath !== "") {
       writer.uint32(10).string(message.subPath);
     }
@@ -517,7 +619,10 @@ export const PackageRepositoryHttp = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryHttp {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryHttp {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryHttp();
@@ -553,7 +658,7 @@ export const PackageRepositoryHttp = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryHttp>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryHttp {
     const message = createBasePackageRepositoryHttp();
     message.subPath = object.subPath ?? "";
@@ -567,20 +672,29 @@ function createBasePackageRepositoryInline(): PackageRepositoryInline {
 }
 
 export const PackageRepositoryInline = {
-  encode(message: PackageRepositoryInline, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageRepositoryInline,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     Object.entries(message.paths).forEach(([key, value]) => {
       PackageRepositoryInline_PathsEntry.encode(
         { key: key as any, value },
-        writer.uint32(10).fork(),
+        writer.uint32(10).fork()
       ).ldelim();
     });
     for (const v of message.pathsFrom) {
-      PackageRepositoryInline_Source.encode(v!, writer.uint32(18).fork()).ldelim();
+      PackageRepositoryInline_Source.encode(
+        v!,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryInline {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryInline {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryInline();
@@ -588,13 +702,18 @@ export const PackageRepositoryInline = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = PackageRepositoryInline_PathsEntry.decode(reader, reader.uint32());
+          const entry1 = PackageRepositoryInline_PathsEntry.decode(
+            reader,
+            reader.uint32()
+          );
           if (entry1.value !== undefined) {
             message.paths[entry1.key] = entry1.value;
           }
           break;
         case 2:
-          message.pathsFrom.push(PackageRepositoryInline_Source.decode(reader, reader.uint32()));
+          message.pathsFrom.push(
+            PackageRepositoryInline_Source.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -607,13 +726,18 @@ export const PackageRepositoryInline = {
   fromJSON(object: any): PackageRepositoryInline {
     return {
       paths: isObject(object.paths)
-        ? Object.entries(object.paths).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-            acc[key] = String(value);
-            return acc;
-          }, {})
+        ? Object.entries(object.paths).reduce<{ [key: string]: string }>(
+            (acc, [key, value]) => {
+              acc[key] = String(value);
+              return acc;
+            },
+            {}
+          )
         : {},
       pathsFrom: Array.isArray(object?.pathsFrom)
-        ? object.pathsFrom.map((e: any) => PackageRepositoryInline_Source.fromJSON(e))
+        ? object.pathsFrom.map((e: any) =>
+            PackageRepositoryInline_Source.fromJSON(e)
+          )
         : [],
     };
   },
@@ -627,8 +751,8 @@ export const PackageRepositoryInline = {
       });
     }
     if (message.pathsFrom) {
-      obj.pathsFrom = message.pathsFrom.map(e =>
-        e ? PackageRepositoryInline_Source.toJSON(e) : undefined,
+      obj.pathsFrom = message.pathsFrom.map((e) =>
+        e ? PackageRepositoryInline_Source.toJSON(e) : undefined
       );
     } else {
       obj.pathsFrom = [];
@@ -637,7 +761,7 @@ export const PackageRepositoryInline = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryInline>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryInline {
     const message = createBasePackageRepositoryInline();
     message.paths = Object.entries(object.paths ?? {}).reduce<{
@@ -649,7 +773,9 @@ export const PackageRepositoryInline = {
       return acc;
     }, {});
     message.pathsFrom =
-      object.pathsFrom?.map(e => PackageRepositoryInline_Source.fromPartial(e)) || [];
+      object.pathsFrom?.map((e) =>
+        PackageRepositoryInline_Source.fromPartial(e)
+      ) || [];
     return message;
   },
 };
@@ -661,7 +787,7 @@ function createBasePackageRepositoryInline_SourceRef(): PackageRepositoryInline_
 export const PackageRepositoryInline_SourceRef = {
   encode(
     message: PackageRepositoryInline_SourceRef,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -672,7 +798,10 @@ export const PackageRepositoryInline_SourceRef = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryInline_SourceRef {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryInline_SourceRef {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryInline_SourceRef();
@@ -696,20 +825,23 @@ export const PackageRepositoryInline_SourceRef = {
   fromJSON(object: any): PackageRepositoryInline_SourceRef {
     return {
       name: isSet(object.name) ? String(object.name) : "",
-      directoryPath: isSet(object.directoryPath) ? String(object.directoryPath) : "",
+      directoryPath: isSet(object.directoryPath)
+        ? String(object.directoryPath)
+        : "",
     };
   },
 
   toJSON(message: PackageRepositoryInline_SourceRef): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.directoryPath !== undefined && (obj.directoryPath = message.directoryPath);
+    message.directoryPath !== undefined &&
+      (obj.directoryPath = message.directoryPath);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PackageRepositoryInline_SourceRef>, I>>(
-    object: I,
-  ): PackageRepositoryInline_SourceRef {
+  fromPartial<
+    I extends Exact<DeepPartial<PackageRepositoryInline_SourceRef>, I>
+  >(object: I): PackageRepositoryInline_SourceRef {
     const message = createBasePackageRepositoryInline_SourceRef();
     message.name = object.name ?? "";
     message.directoryPath = object.directoryPath ?? "";
@@ -724,24 +856,27 @@ function createBasePackageRepositoryInline_Source(): PackageRepositoryInline_Sou
 export const PackageRepositoryInline_Source = {
   encode(
     message: PackageRepositoryInline_Source,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.secretRef !== undefined) {
       PackageRepositoryInline_SourceRef.encode(
         message.secretRef,
-        writer.uint32(10).fork(),
+        writer.uint32(10).fork()
       ).ldelim();
     }
     if (message.configMapRef !== undefined) {
       PackageRepositoryInline_SourceRef.encode(
         message.configMapRef,
-        writer.uint32(18).fork(),
+        writer.uint32(18).fork()
       ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryInline_Source {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryInline_Source {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryInline_Source();
@@ -749,10 +884,16 @@ export const PackageRepositoryInline_Source = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.secretRef = PackageRepositoryInline_SourceRef.decode(reader, reader.uint32());
+          message.secretRef = PackageRepositoryInline_SourceRef.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 2:
-          message.configMapRef = PackageRepositoryInline_SourceRef.decode(reader, reader.uint32());
+          message.configMapRef = PackageRepositoryInline_SourceRef.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -787,7 +928,7 @@ export const PackageRepositoryInline_Source = {
   },
 
   fromPartial<I extends Exact<DeepPartial<PackageRepositoryInline_Source>, I>>(
-    object: I,
+    object: I
   ): PackageRepositoryInline_Source {
     const message = createBasePackageRepositoryInline_Source();
     message.secretRef =
@@ -809,7 +950,7 @@ function createBasePackageRepositoryInline_PathsEntry(): PackageRepositoryInline
 export const PackageRepositoryInline_PathsEntry = {
   encode(
     message: PackageRepositoryInline_PathsEntry,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
@@ -820,7 +961,10 @@ export const PackageRepositoryInline_PathsEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackageRepositoryInline_PathsEntry {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PackageRepositoryInline_PathsEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackageRepositoryInline_PathsEntry();
@@ -855,9 +999,9 @@ export const PackageRepositoryInline_PathsEntry = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PackageRepositoryInline_PathsEntry>, I>>(
-    object: I,
-  ): PackageRepositoryInline_PathsEntry {
+  fromPartial<
+    I extends Exact<DeepPartial<PackageRepositoryInline_PathsEntry>, I>
+  >(object: I): PackageRepositoryInline_PathsEntry {
     const message = createBasePackageRepositoryInline_PathsEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
@@ -870,9 +1014,15 @@ function createBaseVersionSelection(): VersionSelection {
 }
 
 export const VersionSelection = {
-  encode(message: VersionSelection, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: VersionSelection,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.semver !== undefined) {
-      VersionSelectionSemver.encode(message.semver, writer.uint32(10).fork()).ldelim();
+      VersionSelectionSemver.encode(
+        message.semver,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -885,7 +1035,10 @@ export const VersionSelection = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.semver = VersionSelectionSemver.decode(reader, reader.uint32());
+          message.semver = VersionSelectionSemver.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -897,18 +1050,24 @@ export const VersionSelection = {
 
   fromJSON(object: any): VersionSelection {
     return {
-      semver: isSet(object.semver) ? VersionSelectionSemver.fromJSON(object.semver) : undefined,
+      semver: isSet(object.semver)
+        ? VersionSelectionSemver.fromJSON(object.semver)
+        : undefined,
     };
   },
 
   toJSON(message: VersionSelection): unknown {
     const obj: any = {};
     message.semver !== undefined &&
-      (obj.semver = message.semver ? VersionSelectionSemver.toJSON(message.semver) : undefined);
+      (obj.semver = message.semver
+        ? VersionSelectionSemver.toJSON(message.semver)
+        : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<VersionSelection>, I>>(object: I): VersionSelection {
+  fromPartial<I extends Exact<DeepPartial<VersionSelection>, I>>(
+    object: I
+  ): VersionSelection {
     const message = createBaseVersionSelection();
     message.semver =
       object.semver !== undefined && object.semver !== null
@@ -923,20 +1082,26 @@ function createBaseVersionSelectionSemver(): VersionSelectionSemver {
 }
 
 export const VersionSelectionSemver = {
-  encode(message: VersionSelectionSemver, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: VersionSelectionSemver,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.constraints !== "") {
       writer.uint32(10).string(message.constraints);
     }
     if (message.prereleases !== undefined) {
       VersionSelectionSemverPrereleases.encode(
         message.prereleases,
-        writer.uint32(18).fork(),
+        writer.uint32(18).fork()
       ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): VersionSelectionSemver {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): VersionSelectionSemver {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVersionSelectionSemver();
@@ -947,7 +1112,10 @@ export const VersionSelectionSemver = {
           message.constraints = reader.string();
           break;
         case 2:
-          message.prereleases = VersionSelectionSemverPrereleases.decode(reader, reader.uint32());
+          message.prereleases = VersionSelectionSemverPrereleases.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -968,7 +1136,8 @@ export const VersionSelectionSemver = {
 
   toJSON(message: VersionSelectionSemver): unknown {
     const obj: any = {};
-    message.constraints !== undefined && (obj.constraints = message.constraints);
+    message.constraints !== undefined &&
+      (obj.constraints = message.constraints);
     message.prereleases !== undefined &&
       (obj.prereleases = message.prereleases
         ? VersionSelectionSemverPrereleases.toJSON(message.prereleases)
@@ -977,7 +1146,7 @@ export const VersionSelectionSemver = {
   },
 
   fromPartial<I extends Exact<DeepPartial<VersionSelectionSemver>, I>>(
-    object: I,
+    object: I
   ): VersionSelectionSemver {
     const message = createBaseVersionSelectionSemver();
     message.constraints = object.constraints ?? "";
@@ -996,7 +1165,7 @@ function createBaseVersionSelectionSemverPrereleases(): VersionSelectionSemverPr
 export const VersionSelectionSemverPrereleases = {
   encode(
     message: VersionSelectionSemverPrereleases,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     for (const v of message.identifiers) {
       writer.uint32(10).string(v!);
@@ -1004,7 +1173,10 @@ export const VersionSelectionSemverPrereleases = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): VersionSelectionSemverPrereleases {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): VersionSelectionSemverPrereleases {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVersionSelectionSemverPrereleases();
@@ -1033,18 +1205,18 @@ export const VersionSelectionSemverPrereleases = {
   toJSON(message: VersionSelectionSemverPrereleases): unknown {
     const obj: any = {};
     if (message.identifiers) {
-      obj.identifiers = message.identifiers.map(e => e);
+      obj.identifiers = message.identifiers.map((e) => e);
     } else {
       obj.identifiers = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<VersionSelectionSemverPrereleases>, I>>(
-    object: I,
-  ): VersionSelectionSemverPrereleases {
+  fromPartial<
+    I extends Exact<DeepPartial<VersionSelectionSemverPrereleases>, I>
+  >(object: I): VersionSelectionSemverPrereleases {
     const message = createBaseVersionSelectionSemverPrereleases();
-    message.identifiers = object.identifiers?.map(e => e) || [];
+    message.identifiers = object.identifiers?.map((e) => e) || [];
     return message;
   },
 };
@@ -1053,42 +1225,42 @@ export interface KappControllerPackagesService {
   /** GetAvailablePackageSummaries returns the available packages managed by the 'kapp_controller' plugin */
   GetAvailablePackageSummaries(
     request: DeepPartial<GetAvailablePackageSummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetAvailablePackageSummariesResponse>;
   /** GetAvailablePackageDetail returns the package details managed by the 'kapp_controller' plugin */
   GetAvailablePackageDetail(
     request: DeepPartial<GetAvailablePackageDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetAvailablePackageDetailResponse>;
   /** GetAvailablePackageVersions returns the package versions managed by the 'kapp_controller' plugin */
   GetAvailablePackageVersions(
     request: DeepPartial<GetAvailablePackageVersionsRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetAvailablePackageVersionsResponse>;
   /** GetInstalledPackageSummaries returns the installed packages managed by the 'kapp_controller' plugin */
   GetInstalledPackageSummaries(
     request: DeepPartial<GetInstalledPackageSummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetInstalledPackageSummariesResponse>;
   /** GetInstalledPackageDetail returns the requested installed package managed by the 'kapp_controller' plugin */
   GetInstalledPackageDetail(
     request: DeepPartial<GetInstalledPackageDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetInstalledPackageDetailResponse>;
   /** CreateInstalledPackage creates an installed package based on the request. */
   CreateInstalledPackage(
     request: DeepPartial<CreateInstalledPackageRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<CreateInstalledPackageResponse>;
   /** UpdateInstalledPackage updates an installed package based on the request. */
   UpdateInstalledPackage(
     request: DeepPartial<UpdateInstalledPackageRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<UpdateInstalledPackageResponse>;
   /** DeleteInstalledPackage deletes an installed package based on the request. */
   DeleteInstalledPackage(
     request: DeepPartial<DeleteInstalledPackageRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<DeleteInstalledPackageResponse>;
   /**
    * GetInstalledPackageResourceRefs returns the references for the Kubernetes resources created by
@@ -1096,122 +1268,128 @@ export interface KappControllerPackagesService {
    */
   GetInstalledPackageResourceRefs(
     request: DeepPartial<GetInstalledPackageResourceRefsRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetInstalledPackageResourceRefsResponse>;
 }
 
-export class KappControllerPackagesServiceClientImpl implements KappControllerPackagesService {
+export class KappControllerPackagesServiceClientImpl
+  implements KappControllerPackagesService
+{
   private readonly rpc: Rpc;
 
   constructor(rpc: Rpc) {
     this.rpc = rpc;
-    this.GetAvailablePackageSummaries = this.GetAvailablePackageSummaries.bind(this);
+    this.GetAvailablePackageSummaries =
+      this.GetAvailablePackageSummaries.bind(this);
     this.GetAvailablePackageDetail = this.GetAvailablePackageDetail.bind(this);
-    this.GetAvailablePackageVersions = this.GetAvailablePackageVersions.bind(this);
-    this.GetInstalledPackageSummaries = this.GetInstalledPackageSummaries.bind(this);
+    this.GetAvailablePackageVersions =
+      this.GetAvailablePackageVersions.bind(this);
+    this.GetInstalledPackageSummaries =
+      this.GetInstalledPackageSummaries.bind(this);
     this.GetInstalledPackageDetail = this.GetInstalledPackageDetail.bind(this);
     this.CreateInstalledPackage = this.CreateInstalledPackage.bind(this);
     this.UpdateInstalledPackage = this.UpdateInstalledPackage.bind(this);
     this.DeleteInstalledPackage = this.DeleteInstalledPackage.bind(this);
-    this.GetInstalledPackageResourceRefs = this.GetInstalledPackageResourceRefs.bind(this);
+    this.GetInstalledPackageResourceRefs =
+      this.GetInstalledPackageResourceRefs.bind(this);
   }
 
   GetAvailablePackageSummaries(
     request: DeepPartial<GetAvailablePackageSummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetAvailablePackageSummariesResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceGetAvailablePackageSummariesDesc,
       GetAvailablePackageSummariesRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetAvailablePackageDetail(
     request: DeepPartial<GetAvailablePackageDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetAvailablePackageDetailResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceGetAvailablePackageDetailDesc,
       GetAvailablePackageDetailRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetAvailablePackageVersions(
     request: DeepPartial<GetAvailablePackageVersionsRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetAvailablePackageVersionsResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceGetAvailablePackageVersionsDesc,
       GetAvailablePackageVersionsRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetInstalledPackageSummaries(
     request: DeepPartial<GetInstalledPackageSummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetInstalledPackageSummariesResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceGetInstalledPackageSummariesDesc,
       GetInstalledPackageSummariesRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetInstalledPackageDetail(
     request: DeepPartial<GetInstalledPackageDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetInstalledPackageDetailResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceGetInstalledPackageDetailDesc,
       GetInstalledPackageDetailRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   CreateInstalledPackage(
     request: DeepPartial<CreateInstalledPackageRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<CreateInstalledPackageResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceCreateInstalledPackageDesc,
       CreateInstalledPackageRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   UpdateInstalledPackage(
     request: DeepPartial<UpdateInstalledPackageRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<UpdateInstalledPackageResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceUpdateInstalledPackageDesc,
       UpdateInstalledPackageRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   DeleteInstalledPackage(
     request: DeepPartial<DeleteInstalledPackageRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<DeleteInstalledPackageResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceDeleteInstalledPackageDesc,
       DeleteInstalledPackageRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetInstalledPackageResourceRefs(
     request: DeepPartial<GetInstalledPackageResourceRefsRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetInstalledPackageResourceRefsResponse> {
     return this.rpc.unary(
       KappControllerPackagesServiceGetInstalledPackageResourceRefsDesc,
       GetInstalledPackageResourceRefsRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 }
@@ -1336,71 +1514,74 @@ export const KappControllerPackagesServiceGetInstalledPackageDetailDesc: UnaryMe
     } as any,
   };
 
-export const KappControllerPackagesServiceCreateInstalledPackageDesc: UnaryMethodDefinitionish = {
-  methodName: "CreateInstalledPackage",
-  service: KappControllerPackagesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return CreateInstalledPackageRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...CreateInstalledPackageResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const KappControllerPackagesServiceCreateInstalledPackageDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "CreateInstalledPackage",
+    service: KappControllerPackagesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return CreateInstalledPackageRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...CreateInstalledPackageResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
-export const KappControllerPackagesServiceUpdateInstalledPackageDesc: UnaryMethodDefinitionish = {
-  methodName: "UpdateInstalledPackage",
-  service: KappControllerPackagesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return UpdateInstalledPackageRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...UpdateInstalledPackageResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const KappControllerPackagesServiceUpdateInstalledPackageDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "UpdateInstalledPackage",
+    service: KappControllerPackagesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return UpdateInstalledPackageRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...UpdateInstalledPackageResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
-export const KappControllerPackagesServiceDeleteInstalledPackageDesc: UnaryMethodDefinitionish = {
-  methodName: "DeleteInstalledPackage",
-  service: KappControllerPackagesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return DeleteInstalledPackageRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...DeleteInstalledPackageResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const KappControllerPackagesServiceDeleteInstalledPackageDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "DeleteInstalledPackage",
+    service: KappControllerPackagesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return DeleteInstalledPackageRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...DeleteInstalledPackageResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
 export const KappControllerPackagesServiceGetInstalledPackageResourceRefsDesc: UnaryMethodDefinitionish =
   {
@@ -1429,23 +1610,23 @@ export interface KappControllerRepositoriesService {
   /** AddPackageRepository add an existing package repository to the set of ones already managed by the 'kapp_controller' plugin */
   AddPackageRepository(
     request: DeepPartial<AddPackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<AddPackageRepositoryResponse>;
   GetPackageRepositoryDetail(
     request: DeepPartial<GetPackageRepositoryDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositoryDetailResponse>;
   GetPackageRepositorySummaries(
     request: DeepPartial<GetPackageRepositorySummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositorySummariesResponse>;
   UpdatePackageRepository(
     request: DeepPartial<UpdatePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<UpdatePackageRepositoryResponse>;
   DeletePackageRepository(
     request: DeepPartial<DeletePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<DeletePackageRepositoryResponse>;
 }
 
@@ -1457,64 +1638,66 @@ export class KappControllerRepositoriesServiceClientImpl
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.AddPackageRepository = this.AddPackageRepository.bind(this);
-    this.GetPackageRepositoryDetail = this.GetPackageRepositoryDetail.bind(this);
-    this.GetPackageRepositorySummaries = this.GetPackageRepositorySummaries.bind(this);
+    this.GetPackageRepositoryDetail =
+      this.GetPackageRepositoryDetail.bind(this);
+    this.GetPackageRepositorySummaries =
+      this.GetPackageRepositorySummaries.bind(this);
     this.UpdatePackageRepository = this.UpdatePackageRepository.bind(this);
     this.DeletePackageRepository = this.DeletePackageRepository.bind(this);
   }
 
   AddPackageRepository(
     request: DeepPartial<AddPackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<AddPackageRepositoryResponse> {
     return this.rpc.unary(
       KappControllerRepositoriesServiceAddPackageRepositoryDesc,
       AddPackageRepositoryRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetPackageRepositoryDetail(
     request: DeepPartial<GetPackageRepositoryDetailRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositoryDetailResponse> {
     return this.rpc.unary(
       KappControllerRepositoriesServiceGetPackageRepositoryDetailDesc,
       GetPackageRepositoryDetailRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   GetPackageRepositorySummaries(
     request: DeepPartial<GetPackageRepositorySummariesRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<GetPackageRepositorySummariesResponse> {
     return this.rpc.unary(
       KappControllerRepositoriesServiceGetPackageRepositorySummariesDesc,
       GetPackageRepositorySummariesRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   UpdatePackageRepository(
     request: DeepPartial<UpdatePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<UpdatePackageRepositoryResponse> {
     return this.rpc.unary(
       KappControllerRepositoriesServiceUpdatePackageRepositoryDesc,
       UpdatePackageRepositoryRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 
   DeletePackageRepository(
     request: DeepPartial<DeletePackageRepositoryRequest>,
-    metadata?: grpc.Metadata,
+    metadata?: grpc.Metadata
   ): Promise<DeletePackageRepositoryResponse> {
     return this.rpc.unary(
       KappControllerRepositoriesServiceDeletePackageRepositoryDesc,
       DeletePackageRepositoryRequest.fromPartial(request),
-      metadata,
+      metadata
     );
   }
 }
@@ -1524,27 +1707,28 @@ export const KappControllerRepositoriesServiceDesc = {
     "kubeappsapis.plugins.kapp_controller.packages.v1alpha1.KappControllerRepositoriesService",
 };
 
-export const KappControllerRepositoriesServiceAddPackageRepositoryDesc: UnaryMethodDefinitionish = {
-  methodName: "AddPackageRepository",
-  service: KappControllerRepositoriesServiceDesc,
-  requestStream: false,
-  responseStream: false,
-  requestType: {
-    serializeBinary() {
-      return AddPackageRepositoryRequest.encode(this).finish();
-    },
-  } as any,
-  responseType: {
-    deserializeBinary(data: Uint8Array) {
-      return {
-        ...AddPackageRepositoryResponse.decode(data),
-        toObject() {
-          return this;
-        },
-      };
-    },
-  } as any,
-};
+export const KappControllerRepositoriesServiceAddPackageRepositoryDesc: UnaryMethodDefinitionish =
+  {
+    methodName: "AddPackageRepository",
+    service: KappControllerRepositoriesServiceDesc,
+    requestStream: false,
+    responseStream: false,
+    requestType: {
+      serializeBinary() {
+        return AddPackageRepositoryRequest.encode(this).finish();
+      },
+    } as any,
+    responseType: {
+      deserializeBinary(data: Uint8Array) {
+        return {
+          ...AddPackageRepositoryResponse.decode(data),
+          toObject() {
+            return this;
+          },
+        };
+      },
+    } as any,
+  };
 
 export const KappControllerRepositoriesServiceGetPackageRepositoryDetailDesc: UnaryMethodDefinitionish =
   {
@@ -1638,7 +1822,8 @@ export const KappControllerRepositoriesServiceDeletePackageRepositoryDesc: Unary
     } as any,
   };
 
-interface UnaryMethodDefinitionishR extends grpc.UnaryMethodDefinition<any, any> {
+interface UnaryMethodDefinitionishR
+  extends grpc.UnaryMethodDefinition<any, any> {
   requestStream: any;
   responseStream: any;
 }
@@ -1649,7 +1834,7 @@ interface Rpc {
   unary<T extends UnaryMethodDefinitionish>(
     methodDesc: T,
     request: any,
-    metadata: grpc.Metadata | undefined,
+    metadata: grpc.Metadata | undefined
   ): Promise<any>;
 }
 
@@ -1669,7 +1854,7 @@ export class GrpcWebImpl {
 
       debug?: boolean;
       metadata?: grpc.Metadata;
-    },
+    }
   ) {
     this.host = host;
     this.options = options;
@@ -1678,7 +1863,7 @@ export class GrpcWebImpl {
   unary<T extends UnaryMethodDefinitionish>(
     methodDesc: T,
     _request: any,
-    metadata: grpc.Metadata | undefined,
+    metadata: grpc.Metadata | undefined
   ): Promise<any> {
     const request = { ..._request, ...methodDesc.requestType };
     const maybeCombinedMetadata =
@@ -1710,7 +1895,14 @@ export class GrpcWebImpl {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -1725,7 +1917,10 @@ export type DeepPartial<T> = T extends Builtin
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P>>, never>;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

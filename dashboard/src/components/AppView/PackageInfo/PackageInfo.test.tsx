@@ -130,7 +130,7 @@ context("PackageUpdateInfo: when information about updates is available", () => 
       ...defaultProps.installedPackageDetail,
       reconciliationOptions: {
         serviceAccountName: "my-sa",
-        interval: 99,
+        interval: { duration: 99 },
         suspend: false,
       } as ReconciliationOptions,
     } as InstalledPackageDetail;

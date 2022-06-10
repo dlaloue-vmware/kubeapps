@@ -5,6 +5,7 @@ package main
 
 import (
 	"context"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"math"
 	"strings"
 	"testing"
@@ -298,7 +299,7 @@ func TestKindClusterUpdateInstalledPackage(t *testing.T) {
 			tc.expectedDetailAfterUpdate.InstalledPackageRef = installedRef
 			tc.expectedDetailAfterUpdate.Name = tc.integrationTestCreatePackageSpec.request.Name
 			tc.expectedDetailAfterUpdate.ReconciliationOptions = &corev1.ReconciliationOptions{
-				Interval: 60,
+				Interval: &metav1.Duration{Duration: 60 * time.Second},
 			}
 			tc.expectedDetailAfterUpdate.AvailablePackageRef = tc.integrationTestCreatePackageSpec.request.AvailablePackageRef
 			tc.expectedDetailAfterUpdate.PostInstallationNotes = strings.ReplaceAll(
@@ -1421,7 +1422,7 @@ func createAndWaitForHelmRelease(t *testing.T, tc integrationTestCreatePackageSp
 		tc.expectedDetail.Name = tc.request.Name
 		if tc.request.ReconciliationOptions == nil {
 			tc.expectedDetail.ReconciliationOptions = &corev1.ReconciliationOptions{
-				Interval: 60,
+				Interval: &metav1.Duration{Duration: 60 * time.Second},
 			}
 		}
 	}
