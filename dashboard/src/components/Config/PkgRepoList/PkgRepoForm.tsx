@@ -222,6 +222,7 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
       setSecretAuthName(repo.auth?.secretRef?.name || "");
       setSecretTLSName(repo.tlsConfig?.secretRef?.name || "");
       setIsUserManagedSecret(!!repo.auth?.secretRef?.name);
+      setIsUserManagedCASecret(!!repo.tlsConfig?.secretRef?.name);
 
       // setting custom details for the Helm plugin
       if (repo.packageRepoRef?.plugin?.name === PluginNames.PACKAGES_HELM) {
@@ -1055,7 +1056,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                           PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_UNSPECIFIED
                         }
                         onChange={handleAuthRadioButtonChange}
-                        disabled={!!repo.auth?.type}
                       />
                     </CdsRadio>
                     <CdsRadio>
@@ -1296,7 +1296,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_BASIC_AUTH
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                           <br />
@@ -1312,7 +1311,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_BASIC_AUTH
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                         </>
@@ -1345,7 +1343,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_BEARER
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                         </>
@@ -1377,7 +1374,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_DOCKER_CONFIG_JSON
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                           <br />
@@ -1392,7 +1388,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_DOCKER_CONFIG_JSON
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                           <br />
@@ -1408,7 +1403,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_DOCKER_CONFIG_JSON
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                           <br />
@@ -1419,7 +1413,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                               value={secretEmail || ""}
                               onChange={handleAuthSecretEmailChange}
                               placeholder="user@example.com"
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                         </>
@@ -1454,7 +1447,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_AUTHORIZATION_HEADER
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsInput>
                         </>
@@ -1489,7 +1481,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_SSH
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsTextarea>
                           <br />
@@ -1509,7 +1500,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_SSH
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsTextarea>
                         </>
@@ -1544,7 +1534,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_TLS
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsTextarea>
                           <br />
@@ -1562,7 +1551,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_TLS
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsTextarea>
                         </>
@@ -1597,7 +1585,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                 authMethod ===
                                 PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_OPAQUE
                               }
-                              disabled={!!repo.auth?.type}
                             />
                           </CdsTextarea>
                         </>
@@ -1669,12 +1656,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                             PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_UNSPECIFIED
                           }
                           onChange={handleImgPSChange}
-                          disabled={
-                            !!(repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>)
-                              ?.imagesPullSecret?.credentials ||
-                            !!(repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>)
-                              ?.imagesPullSecret?.secretRef
-                          }
                           required={
                             authMethod ===
                             PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_DOCKER_CONFIG_JSON
@@ -1726,31 +1707,29 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                         }
                       >
                         {authMethod ===
-                          PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_DOCKER_CONFIG_JSON && (
-                          <CdsToggleGroup className="flex-v-center">
-                            <CdsToggle>
-                              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                              <label>
-                                {useSameAuthCreds
-                                  ? "Use the same auth credentials as the container registry credentials"
-                                  : "Manually set the container registry credentials"}
-                              </label>
-                              <input
-                                type="checkbox"
-                                onChange={handleUseSameAuthCredsChange}
-                                checked={useSameAuthCreds}
-                                disabled={
-                                  !!(
-                                    repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                  )?.imagesPullSecret?.credentials ||
-                                  !!(
-                                    repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                  )?.imagesPullSecret?.secretRef
-                                }
-                              />
-                            </CdsToggle>
-                          </CdsToggleGroup>
-                        )}
+                          PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_DOCKER_CONFIG_JSON &&
+                          !(
+                            !!(repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>)
+                              ?.imagesPullSecret?.credentials ||
+                            !!(repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>)
+                              ?.imagesPullSecret?.secretRef
+                          ) && (
+                            <CdsToggleGroup className="flex-v-center">
+                              <CdsToggle>
+                                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                <label>
+                                  {useSameAuthCreds
+                                    ? "Use the same auth credentials as the container registry credentials"
+                                    : "Manually set the container registry credentials"}
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  onChange={handleUseSameAuthCredsChange}
+                                  checked={useSameAuthCreds}
+                                />
+                              </CdsToggle>
+                            </CdsToggleGroup>
+                          )}
                         <br />
                         {!useSameAuthCreds && (
                           <>
@@ -1769,7 +1748,10 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                   disabled={
                                     !!(
                                       repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                    )?.imagesPullSecret?.credentials
+                                    )?.imagesPullSecret?.credentials ||
+                                    !!(
+                                      repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
+                                    )?.imagesPullSecret?.secretRef
                                   }
                                 />
                               </CdsToggle>
@@ -1794,11 +1776,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                     }
                                     pattern={k8sObjectNameRegex}
                                     title="Use lower case alphanumeric characters, '-' or '.'"
-                                    disabled={
-                                      !!(
-                                        repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                      )?.imagesPullSecret?.secretRef
-                                    }
                                   />
                                 </CdsInput>
                                 <br />
@@ -1831,11 +1808,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                       helmPSAuthMethod !==
                                         PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_UNSPECIFIED
                                     }
-                                    disabled={
-                                      !!(
-                                        repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                      )?.imagesPullSecret?.credentials
-                                    }
                                   />
                                 </CdsInput>
                                 <br />
@@ -1852,11 +1824,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                       !isUserManagedPSSecret &&
                                       helmPSAuthMethod !==
                                         PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_UNSPECIFIED
-                                    }
-                                    disabled={
-                                      !!(
-                                        repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                      )?.imagesPullSecret?.credentials
                                     }
                                   />
                                 </CdsInput>
@@ -1876,11 +1843,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                       helmPSAuthMethod !==
                                         PackageRepositoryAuth_PackageRepositoryAuthType.PACKAGE_REPOSITORY_AUTH_TYPE_UNSPECIFIED
                                     }
-                                    disabled={
-                                      !!(
-                                        repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                      )?.imagesPullSecret?.credentials
-                                    }
                                   />
                                 </CdsInput>
                                 <br />
@@ -1893,11 +1855,6 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                                     value={pullSecretEmail || ""}
                                     onChange={handleImgPSEmailChange}
                                     placeholder="user@example.com"
-                                    disabled={
-                                      !!(
-                                        repo?.customDetail as Partial<HelmPackageRepositoryCustomDetail>
-                                      )?.imagesPullSecret?.credentials
-                                    }
                                   />
                                 </CdsInput>
                               </>
@@ -2050,7 +2007,11 @@ export function PkgRepoForm(props: IPkgRepoFormProps) {
                           type="checkbox"
                           onChange={handleIsUserManagedCASecretChange}
                           checked={isUserManagedCASecret}
-                          disabled={skipTLS}
+                          disabled={
+                            skipTLS ||
+                            (!!repo?.name &&
+                              (!!repo?.tlsConfig?.certAuthority || !!repo?.tlsConfig?.secretRef))
+                          }
                         />
                       </CdsToggle>
                     </CdsToggleGroup>
